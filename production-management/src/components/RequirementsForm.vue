@@ -1,8 +1,9 @@
 <template>
     <div class="popup-overlay" @click="closePopup">
-        <div class="popup" @click.stop>
+      <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
+        <div v-if="!isSubmitFormVisible" class="popup" @click.stop>
           <div class="header">
-              <h1 class="header__text">РАЗМЕЩЕНИЕ ЗАКАЗА</h1>
+              <h1 class="header__text">ПОТРЕБНОСТИ ПРОИЗВОДСТВА</h1>
               <hr class="div-line">
           </div>
           <div class="content">
@@ -14,11 +15,13 @@
                 <h3>Заголовок</h3>
               </div>
               <div class="positions__content">
-                Позиции
+                <input v-model="this.requirements" type="text">
+                <p>Текущие запросы:</p>
+                <p>{{ this.currentOrder.requirements }}</p>
               </div>
             </div>
             <div class="footer">
-              Футер (кнопки)
+              <button @click="addRequirements">Добавить</button>
               <button @click="closePopup">Close Popup</button>
             </div>
           </div>
@@ -27,18 +30,51 @@
 </template>
 
 <script>
+import SubmitForm from './SubmitForm.vue'
+
 export default {
   data () {
     return {
-      isPopupVisible: false
+      isSubmitFormVisible: false,
+      requirements: ''
     }
+  },
+  props: {
+    currentOrder: Object
   },
   methods: {
     closePopup () {
-      this.isPopupVisible = false
       this.$emit('close-popup')
+    },
+    addRequirements () {
+      this.isSubmitFormVisible = true
+    },
+    async confirmActions () {
+      try {
+        await this.$store.dispatch('updateOrder', {
+          client_id: this.currentOrder.client_id,
+          is_commercial_secret: this.currentOrder.is_commercial_secret,
+          creation_date: this.currentOrder.creation_date,
+          deadline: this.currentOrder.deadline,
+          doc_number: this.currentOrder.doc_number,
+          shipping_status: this.currentOrder.shipping_status,
+          requirements: this.requirements,
+          id: this.currentOrder.id
+        })
+
+        console.log('Потребности сделаны')
+        this.$emit('requirements-creation')
+        this.closePopup()
+      } catch (error) {
+        console.error('Ошибка при обновлении заказа:', error)
+      }
+    },
+    denyActions () {
+      console.log('Образец не создан')
+      this.isSubmitFormVisible = false
     }
-  }
+  },
+  components: { SubmitForm }
 }
 </script>
 

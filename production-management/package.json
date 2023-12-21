@@ -8,8 +8,17 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "axios": "^1.6.2",
     "core-js": "^3.8.3",
+    "docxtemplater": "^3.42.6",
+    "file-saver": "^2.0.5",
+    "mammoth": "^1.6.0",
+    "path-browserify": "^1.0.1",
+    "pizzip": "^3.1.4",
     "register-service-worker": "^1.7.2",
+    "util": "^0.12.5",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"

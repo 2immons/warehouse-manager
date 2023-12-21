@@ -21,9 +21,12 @@
         </div>
       </div>
       <div class="cell cell9">
-        <button class="button" @click="this.$emit('open-popup')">Отгрузить</button>
+        <button class="button" @click="this.$emit('open-shipping-form')">Отгрузить</button>
       </div>
       <div class="cell cell10">1</div>
+      <div class="cell cell11">
+        <button class="button" @click="this.$emit('open-requirements-form')">{{ buttonText }}</button>
+      </div>
     </div>
 </template>
 
@@ -31,13 +34,14 @@
 export default {
   data () {
     return {
+      buttonText: 'Создать'
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-// 5% 20% 6% 6% 10% 20% 6% 7% 10% 10%
+// 5% 15% 7% 7% 9% 15% 5% 7% 10% 10% 10%
 .table__row
   display: flex
   border: 1px solid black
@@ -54,13 +58,13 @@ export default {
 .cell1
   width: 5%
 .cell2
-  width: 20%
+  width: 15%
 .cell3
   width: 7%
 .cell4
   width: 7%
 .cell5
-  width: 11%
+  width: 9%
 .position
   display: flex
 .quantity
@@ -71,12 +75,12 @@ export default {
   flex-direction: column
   justify-content: space-evenly
   gap: 7px
-  width: 17%
+  width: 15%
 .cell7
   flex-direction: column
   justify-content: space-evenly
   gap: 7px
-  width: 6%
+  width: 5%
 .cell8
   flex-direction: column
   justify-content: space-evenly
@@ -86,6 +90,11 @@ export default {
   width: 10%
 .cell10
   width: 10%
+.cell11
+  width: 10%
+  display: flex
+  flex-direction: column
+  gap: 5px
 .button
   min-width: 100px
   display: flex

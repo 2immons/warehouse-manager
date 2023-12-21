@@ -2,7 +2,7 @@
     <div class="popup-overlay" @click="closePopup">
         <div class="popup" @click.stop>
           <div class="header">
-              <h1 class="header__text">РАЗМЕЩЕНИЕ ЗАКАЗА</h1>
+              <h1 class="header__text">ЗАПРОС НА ПОСТАВКУ</h1>
               <hr class="div-line">
           </div>
           <div class="content">

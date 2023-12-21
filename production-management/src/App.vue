@@ -29,6 +29,11 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
+button{
+  padding-block: 0px;
+  padding-inline: 0px;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -43,6 +48,10 @@ a {
 
 hr{
   margin: 0
+}
+
+input[type="checkbox"]{
+  margin: 0;
 }
 
 body {
@@ -66,6 +75,20 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: darkgray;
+  border-radius: 12px;
 }
 
 </style>

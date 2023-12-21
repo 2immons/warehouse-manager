@@ -1,24 +1,25 @@
 <template>
     <div class="popup-overlay" @click="closePopup">
-        <div class="popup" @click.stop>
+      <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
+        <div v-if="!isSubmitFormVisible" class="popup" @click.stop>
           <div class="header">
-              <h1 class="header__text">РАЗМЕЩЕНИЕ ЗАКАЗА</h1>
+              <h1 class="header__text">АКТ О ПРОИЗВОДСТВЕ</h1>
               <hr class="div-line">
           </div>
           <div class="content">
             <div class="intro-info">
-              Общая информация
+              {{ this.currentProduct.id }}
             </div>
             <div class="positions">
               <div class="positions__header">
                 <h3>Заголовок</h3>
               </div>
               <div class="positions__content">
-                Позиции
+                <input type="text" v-model="this.producedQuantity">
               </div>
             </div>
             <div class="footer">
-              Футер (кнопки)
+              <button @click="productProduct">Произвести</button>
               <button @click="closePopup">Close Popup</button>
             </div>
           </div>
@@ -27,18 +28,47 @@
 </template>
 
 <script>
+import SubmitForm from './SubmitForm.vue'
+
 export default {
   data () {
     return {
-      isPopupVisible: false
+      isSubmitFormVisible: false,
+      producedQuantity: 0
     }
   },
+  props: {
+    currentProduct: Object
+  },
   methods: {
+    async confirmActions () {
+      try {
+        await this.$store.dispatch('updateProduct', {
+          name: this.currentProduct.name,
+          produced: this.producedQuantity,
+          shipped: this.currentProduct.shipped,
+          ready_to_ship: this.currentProduct.ready_to_ship,
+          id: this.currentProduct.id
+        })
+        console.log('Продукт произведен')
+        this.$emit('product-creation')
+        this.closePopup()
+      } catch (error) {
+        console.error('Ошибка при обновлении заказа:', error)
+      }
+    },
+    productProduct () {
+      this.isSubmitFormVisible = true
+    },
+    denyActions () {
+      console.log('Продукт не проивзеден')
+      this.isSubmitFormVisible = false
+    },
     closePopup () {
-      this.isPopupVisible = false
       this.$emit('close-popup')
     }
-  }
+  },
+  components: { SubmitForm }
 }
 </script>
 

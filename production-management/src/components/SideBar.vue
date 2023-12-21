@@ -15,24 +15,28 @@
             </div>
             <hr class="div-line">
             <div :class="{ 'nav-item': true, 'active': $route.path === '/orders' }">
-                <router-link class="router-link" to="/orders">Заказы</router-link>
+                <router-link class="router-link" to="/orders">Задания для<br>производства</router-link>
+            </div>
+            <hr class="div-line">
+            <div :class="{ 'nav-item': true, 'active': $route.path === '/counterparties' }">
+                <router-link class="router-link" to="/counterparties">Контрагенты</router-link>
             </div>
             <hr class="div-line">
             <div :class="{ 'nav-item': true, 'active': $route.path === '/logs' }">
                 <router-link class="router-link" to="/logs">История изменений</router-link>
             </div>
             <hr class="div-line">
-            <div :class="{ 'nav-item': true, 'active': $route.path === '/info' }">
-                <router-link class="router-link" to="/info">Информация</router-link>
-            </div>
-            <hr class="div-line">
         </nav>
+        <div class="time-section">
+            <p>Текущее время (GTM +4):</p>
+            <p class="time-section-value-wrapper">{{ this.currentTime }}</p>
+        </div>
         <hr class="div-line">
         <div class="sidebar-footer">
             <div class="sidebar-footer-box">
-                <p class="sidebar-footer-text">Вы вошли как</p>
-                <p class="username">Александр Пушкин</p>
-                <button class="exit-button">Выйти</button>
+                <p class="sidebar-footer-text">Вы вошли как:</p>
+                <p class="username">{{ username }}</p>
+                <button @click="logout" class="exit-button">Выйти</button>
             </div>
         </div>
         <router-view/>
@@ -44,11 +48,20 @@ export default {
   name: 'SideBar',
   data () {
     return {
-      isSidebarButtonVisible: false
+      username: '',
+      isSidebarButtonVisible: false,
+      currentTime: this.getCurrentTime()
     }
+  },
+  created () {
+    // ... Ваши существующие хуки
+    setInterval(() => {
+      this.currentTime = this.getCurrentTime()
+    }, 1000) // Обновляем каждую секунду
   },
   mounted () {
     // Вызываем метод handleResize при монтировании компонента для установки начального значения
+    this.username = sessionStorage.getItem('username')
     this.handleResize()
     // Добавляем обработчик изменения размера окна
     window.addEventListener('resize', this.handleResize)
@@ -58,6 +71,30 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    formatDateTime (dateTimeString) {
+      const originalDate = new Date(dateTimeString)
+      const minutes = originalDate.getMinutes().toString().padStart(2, '0')
+      const hours = originalDate.getHours().toString().padStart(2, '0')
+      const seconds = originalDate.getSeconds().toString().padStart(2, '0')
+      const day = originalDate.getDate().toString().padStart(2, '0')
+      const month = (originalDate.getMonth() + 1).toString().padStart(2, '0')
+      const year = originalDate.getFullYear().toString().padStart(2, '0')
+
+      const formattedDate = `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`
+      return formattedDate
+    },
+    getCurrentTime () {
+      const currentTime = new Date()
+      const gmtPlus4Time = new Date(currentTime.getTime())
+      return this.formatDateTime(gmtPlus4Time)
+    },
+    logout () {
+      this.$router.push('/home')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('userId')
+      sessionStorage.removeItem('username')
+      sessionStorage.removeItem('role')
+    },
     handleResize () {
       // Получаем текущую ширину окна
       const windowWidth = window.innerWidth
@@ -75,7 +112,7 @@ export default {
     display: flex
     flex-direction: column
     width: 17.5%
-    height: 100vh
+    height: 100%
     background-color: #474F65
     @media screen and (max-width: 1780px)
         position: absolute
@@ -83,6 +120,7 @@ export default {
 .sidebar-button
     position: absolute
     align-self: flex-end
+    width: 10%
     margin: 10px 10px
 .sidebar-header
     display: flex
@@ -103,6 +141,11 @@ export default {
     justify-content: center
     align-items: center
     height: 44px
+    &:hover
+        background-color: #5e6884
+.router-link
+    cursor: pointer
+    width: 100%
 .active
     background-color: #5e6884
     font-weight: 700
@@ -118,6 +161,16 @@ export default {
     font-weight: 400
     line-height: normal
     margin-bottom: auto
+.time-section
+    display: flex
+    height: 86px
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    color: white
+.time-section-value-wrapper
+    font-size: 21px
+    margin-top: 6px
 .sidebar-footer
     display: flex
     flex-direction: column

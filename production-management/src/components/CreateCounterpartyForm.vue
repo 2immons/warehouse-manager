@@ -3,19 +3,25 @@
       <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
       <div v-if="!isSubmitFormVisible" class="popup" @click.stop>
         <div class="header">
-            <h1 class="header__text">СОЗДАНИЕ ОБРАЗЦА ПРОДУКЦИИ</h1>
+            <h1 class="header__text">ДОБАВЛЕНИЕ КОНТРАГЕНТА</h1>
             <hr class="div-line">
         </div>
         <div class="content">
           <form class="content__inputs">
-            <label for="">Наименование продукта</label>
+            <label for="">Наименование контрагента</label>
             <input v-model="name" type="text">
 
-            <label for="">Описание продукта</label>
-            <input v-model="description" type="text">
+            <label for="">Адрес контрагента</label>
+            <input v-model="adress" type="text">
+
+            <label for="">ИНН контрагента</label>
+            <input v-model="INN" type="text">
+
+            <label for="">КПП контрагента</label>
+            <input v-model="KPP" type="text">
           </form>
           <div class="footer">
-            <button @click="createProduct">Создать образец<br>продукта</button>
+            <button @click="createCounterparty">Добавить контрагента</button>
           </div>
           <!-- переписать в нормальный вид -->
         </div>
@@ -31,32 +37,36 @@ export default {
     return {
       isSubmitFormVisible: false,
       name: '',
-      description: ''
+      adress: '',
+      INN: '',
+      KPP: ''
     }
   },
   methods: {
     closePopup () {
       this.$emit('close-popup')
     },
-    createProduct () {
+    createCounterparty () {
       this.isSubmitFormVisible = true
     },
     async confirmActions () {
       try {
-        await this.$store.dispatch('createProduct', {
+        await this.$store.dispatch('createCounterparty', {
           name: this.name,
-          description: this.description
+          adress: this.adress,
+          INN: this.INN,
+          KPP: this.KPP
         })
 
         this.isSubmitFormVisible = false
-        this.$emit('add-product')
+        this.$emit('add-counterparty')
         this.closePopup()
       } catch (error) {
-        console.error('Ошибка при создании продукта:', error)
+        console.error('Ошибка при создании контрагента:', error)
       }
     },
     denyActions () {
-      console.log('Образец не создан')
+      console.log('Контрагент не создан')
       this.isSubmitFormVisible = false
     }
   },

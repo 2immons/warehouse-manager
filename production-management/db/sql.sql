@@ -72,3 +72,22 @@ CREATE TABLE agents (
 	INN VARCHAR,
 	KPP VARCHAR
 );
+
+CREATE TABLE products_shipping (
+	product_id INTEGER REFERENCES details(id),
+	order_id INTEGER REFERENCES orders(id),
+	shipping_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	quantity INTEGER
+);
+
+CREATE TABLE products_productions (
+	product_id INTEGER REFERENCES products(id),
+	production_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	quantity INTEGER
+);
+
+CREATE TABLE details_write_offs (
+	detail_id INTEGER REFERENCES details(id),
+	write_off_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	quantity INTEGER
+);

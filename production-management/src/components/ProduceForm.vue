@@ -16,6 +16,7 @@
               </div>
               <div class="positions__content">
                 <input type="text" v-model="this.producedQuantity">
+                <input type="date" v-model="this.date">
               </div>
             </div>
             <div class="footer">
@@ -34,7 +35,8 @@ export default {
   data () {
     return {
       isSubmitFormVisible: false,
-      producedQuantity: 0
+      producedQuantity: 0,
+      date: ''
     }
   },
   props: {
@@ -45,10 +47,15 @@ export default {
       try {
         await this.$store.dispatch('updateProduct', {
           name: this.currentProduct.name,
-          produced: this.producedQuantity,
+          produced: Number(this.currentProduct.produced) + Number(this.producedQuantity),
           shipped: this.currentProduct.shipped,
           ready_to_ship: this.currentProduct.ready_to_ship,
           id: this.currentProduct.id
+        })
+        await this.$store.dispatch('createProduction', {
+          product_id: this.currentProduct.id,
+          production_date: this.date,
+          quantity: this.producedQuantity
         })
         console.log('Продукт произведен')
         this.$emit('product-creation')

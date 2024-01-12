@@ -3,7 +3,7 @@
     <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
     <div v-if="!isSubmitFormVisible" class="popup" @click.stop>
       <div class="header">
-          <h1 class="header__text">РАЗМЕЩЕНИЕ ЗАКАЗА</h1>
+          <h1 class="header__text">РЕДАКТИРОВАНИЕ ЗАКАЗА</h1>
           <hr class="div-line">
       </div>
       <div class="content">
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="footer">
-          <button @click="createOrder">Разместить задание</button>
+          <button @click="createOrder">Отредактировать задание</button>
         </div>
       </div>
     </div>

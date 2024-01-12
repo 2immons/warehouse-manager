@@ -21,7 +21,7 @@
             <input v-model="KPP" type="text">
           </form>
           <div class="footer">
-            <button @click="updateCounterparty">Добавить контрагента</button>
+            <button @click="updateCounterparty">Обновить данные контрагента</button>
           </div>
           <!-- переписать в нормальный вид -->
         </div>

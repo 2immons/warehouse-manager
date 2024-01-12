@@ -16,9 +16,34 @@ export default createStore({
     logs: [],
     orders: [],
     counterparties: [],
-    compabilities: []
+    compabilities: [],
+    productions: [],
+    shippings: [],
+    writeOffs: []
   },
   mutations: {
+    setProductions (state, productions) {
+      state.productions = productions
+    },
+    createProduction (state, production) {
+      state.productions.push(production)
+    },
+    setShippings (state, shippings) {
+      state.shippings = shippings
+    },
+    createShipping (state, shippings) {
+      for (let i = 0; i < shippings.length; i++) {
+        state.shippings.push(shippings[i])
+      }
+    },
+    setWriteOffs (state, writeOffs) {
+      state.writeOffs = writeOffs
+    },
+    createWriteOff (state, writeOffs) {
+      for (let i = 0; i < writeOffs.length; i++) {
+        state.writeOffs.push(writeOffs[i])
+      }
+    },
     setCounterparties (state, counterparties) {
       state.counterparties = counterparties
     },
@@ -57,6 +82,9 @@ export default createStore({
     updateOrders (state, updatedOrders) {
       state.orders = updatedOrders
     },
+    createOrder (state, order) {
+      state.orders.push(order)
+    },
     updateOrder (state, updatedOrder) {
       const index = state.orders.findIndex(order => order.id === updatedOrder.id)
       if (index !== -1) {
@@ -84,9 +112,58 @@ export default createStore({
     getProducts: (state) => state.products,
     getDetails: (state) => state.details,
     getCounterparties: (state) => state.counterparties,
-    getCompabilities: (state) => state.compabilities
+    getCompabilities: (state) => state.compabilities,
+    getProductions: (state) => state.productions,
+    getShippings: (state) => state.shippings,
+    getWriteOffs: (state) => state.writeOffs
   },
   actions: {
+    async createProduction ({ commit }, production) {
+      try {
+        const response = await axios.post('http://localhost:4444/api/create-production', production)
+
+        if (response.data.success) {
+          const production = response.data.production
+          commit('createProduction', production)
+        } else {
+          console.log('Поставка не внесена')
+        }
+      } catch (error) {
+        console.error('Ошибка при создании заказа даты:', error)
+        throw error
+      }
+    },
+    async createWriteOff ({ commit }, detailsDates) {
+      try {
+        const response = await axios.post('http://localhost:4444/api/create-write-off', detailsDates)
+
+        if (response.data.success) {
+          const writeOffs = response.data.writeOffs
+          commit('createWriteOff', writeOffs)
+        } else {
+          console.log('Поставка не внесена')
+        }
+      } catch (error) {
+        console.error('Ошибка при создании заказа даты:', error)
+        throw error
+      }
+    },
+    async createShipping ({ commit }, ordersDates) {
+      try {
+        const response = await axios.post('http://localhost:4444/api/create-shipping', ordersDates)
+
+        if (response.data.success) {
+          const shippings = response.data.shippings
+
+          commit('createShipping', shippings)
+        } else {
+          console.log('Поставка не внесена')
+        }
+      } catch (error) {
+        console.error('Ошибка при создании заказа даты:', error)
+        throw error
+      }
+    },
     async fetchCounterparties ({ commit }) {
       try {
         const response = await axios.get('http://localhost:4444/api/agents')
@@ -183,6 +260,21 @@ export default createStore({
         commit('setOrders', response.data.orders)
       } catch (error) {
         console.error('Error fetching orders:', error)
+      }
+    },
+    async createOrder ({ commit }, order) {
+      try {
+        const response = await axios.post('http://localhost:4444/api/create-order', order)
+
+        if (response.data.success) {
+          const order = response.data.order
+          commit('createOrder', order)
+        } else {
+          console.log('Заказ не размещен')
+        }
+      } catch (error) {
+        console.error('Ошибка при создании заказа:', error)
+        throw error
       }
     },
     async updateOrders ({ commit }, updatedOrders) {

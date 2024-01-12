@@ -68,7 +68,7 @@
                       </svg>
                     </button>
                   </div>
-                  <div class="table-cell-header">Изменить</div>
+                  <div class="table-cell-header">Правка</div>
                   <div class="table-cell-header">Удалить</div>
               </div>
               <div class="table__row" v-for="(item, index) in sortedItems" :key="index">

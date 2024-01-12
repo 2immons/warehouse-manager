@@ -12,7 +12,7 @@
               <label for="">Счет-фактура №</label>
               <input class="input-short" v-model="this.UPD_SF_Number" type="text">
               <label for="">от</label>
-              <input v-model="this.date" type="date">
+              <input type="date" v-model="this.UPD_SF_date">
             </div>
             <div class="input-wrapper">
               <label for="">Статус документа (1 СФ+ПД(а), 2 ПД(а) )</label>
@@ -166,7 +166,7 @@ export default {
       isInputActive: false,
       isSubmitFormVisible: false,
       UPD_SF_Number: '',
-      date: '',
+      UPD_SF_date: '',
       status: '',
       supplierName: '',
       supplierAdress: '',
@@ -180,7 +180,8 @@ export default {
       products: [],
       positions: [],
       filteredItems: [],
-      file: ''
+      file: '',
+      date: ''
     }
   },
   mounted () {
@@ -193,6 +194,13 @@ export default {
   },
   methods: {
     ...mapActions(['fetchProducts']),
+    formatDate (dateString) {
+      const parts = dateString.split('.')
+      const day = parseInt(parts[0], 10)
+      const month = parseInt(parts[1], 10)
+      const year = parseInt(parts[2], 10)
+      return year + '-' + month + '-' + day
+    },
     addCompabilityArrayTo () {
       const compatibleProducts = this.filteredItems.filter(filteredItem => filteredItem.isCompatible === true)
       this.currentPosition.compatibleWith = compatibleProducts
@@ -258,7 +266,9 @@ export default {
           // }
 
           this.UPD_SF_Number = lines[4]
-          this.date = lines[8]
+          console.log(lines[8])
+          this.UPD_SF_date = this.formatDate(lines[8])
+          console.log(this.UPD_SF_date)
           this.status = lines[48]
           this.supplierName = lines[34]
           this.supplierAdress = lines[42]
@@ -268,15 +278,15 @@ export default {
 
           let i = 208 // первая строка с наименованием товара
           while (lines[i] !== '') {
-            console.log(lines[i])
-            console.log(lines[i + 4])
-            console.log(lines[i + 6])
-            console.log(lines[i + 8])
-            console.log(lines[i + 10])
-            console.log(lines[i + 12])
-            console.log(lines[i + 16])
-            console.log(lines[i + 18])
-            console.log(lines[i + 20])
+            // console.log(lines[i])
+            // console.log(lines[i + 4])
+            // console.log(lines[i + 6])
+            // console.log(lines[i + 8])
+            // console.log(lines[i + 10])
+            // console.log(lines[i + 12])
+            // console.log(lines[i + 16])
+            // console.log(lines[i + 18])
+            // console.log(lines[i + 20])
             this.addPositionRow2(lines[i], lines[i + 6], lines[i + 8], lines[i + 10], lines[i + 12], lines[i + 16], lines[i + 18], lines[i + 20])
             i = i + 34
           }

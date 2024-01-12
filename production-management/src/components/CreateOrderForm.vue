@@ -185,7 +185,7 @@ export default {
           this.documentNumber = 'не был указан'
         }
 
-        const responseOrder = await axios.post('http://localhost:4444/api/create-order', {
+        await this.$store.dispatch('createOrder', {
           client_id: this.clientId,
           is_commercial_secret: this.isCommercialSecret,
           creation_date: date,
@@ -193,7 +193,6 @@ export default {
           doc_number: this.documentNumber,
           positions: this.positions
         })
-        console.log('Создан заказ', responseOrder.data.success)
 
         this.isSubmitFormVisible = false
         this.$emit('order-creation')

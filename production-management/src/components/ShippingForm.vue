@@ -16,6 +16,7 @@
               </div>
               <div class="positions__content">
                 {{ this.currentOrder }}
+                <input type="date" v-model="this.date">
               </div>
             </div>
             <div class="footer">
@@ -40,6 +41,7 @@ export default {
   data () {
     return {
       isSubmitFormVisible: false,
+      date: '',
       uploadedFile: null
     }
   },
@@ -127,15 +129,19 @@ export default {
           products = this.getProducts
         })
 
+        const ordersDates = []
+
         this.currentOrder.positions.forEach(position => {
           products.forEach(product => {
             if (position.product_id === product.id) {
               product.shipped = product.shipped + position.quantity
+              ordersDates.push({ product_id: position.product_id, order_id: this.currentOrder.id, shipping_date: this.date, quantity: position.quantity })
             }
           })
         })
 
         await this.$store.dispatch('updateProducts', products)
+        await this.$store.dispatch('createShipping', ordersDates)
         console.log('Заказ отгружен')
         this.$emit('order-shipped')
         this.closePopup()

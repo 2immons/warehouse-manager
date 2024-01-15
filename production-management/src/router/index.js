@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Cookies from 'js-cookie'
 
 const routes = [
   {
@@ -47,7 +48,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = sessionStorage.getItem('token')
+  const token = Cookies.get('token')
   if (to.path !== '/home') {
     // Проверка наличия токена
     if (token) {

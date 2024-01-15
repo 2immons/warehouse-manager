@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
+
 export default {
   name: 'SideBar',
   data () {
@@ -90,9 +92,10 @@ export default {
     },
     logout () {
       this.$router.push('/home')
-      sessionStorage.removeItem('token')
+      Cookies.remove('token')
       sessionStorage.removeItem('userId')
       sessionStorage.removeItem('username')
+      sessionStorage.removeItem('name')
       sessionStorage.removeItem('role')
     },
     handleResize () {

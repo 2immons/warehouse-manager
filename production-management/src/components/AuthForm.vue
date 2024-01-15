@@ -76,6 +76,7 @@ import store from '@/store'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, sameAs } from '@vuelidate/validators'
+import Cookies from 'js-cookie'
 
 export default {
   data () {
@@ -151,8 +152,8 @@ export default {
         return
       }
 
-      sessionStorage.setItem('token', response.data.token)
-      console.log('Успешная аутентификация', sessionStorage.getItem('token'), response.data.user)
+      Cookies.set('token', response.data.token)
+      console.log('Успешная аутентификация', Cookies.get('token'), response.data.user)
       sessionStorage.setItem('username', response.data.user.name)
       sessionStorage.setItem('userId', response.data.user.id)
       sessionStorage.setItem('role', response.data.user.role)

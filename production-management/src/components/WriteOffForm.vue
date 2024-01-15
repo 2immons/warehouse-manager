@@ -294,14 +294,14 @@ export default {
     async confirmActions () {
       try {
         const detailsDates = []
-        const updateDetails = [...this.details]
-        updateDetails.forEach(detail => {
+        const updatedDetails = [...this.details]
+        updatedDetails.forEach(detail => {
           if ('quantity' in detail) {
             detail.written_off = detail.written_off + detail.quantity
             detailsDates.push({ detail_id: detail.id, write_off_date: this.date, quantity: detail.quantity })
           }
         })
-        await this.$store.dispatch('updateDetails', updateDetails)
+        await this.$store.dispatch('updateDetails', updatedDetails)
         await this.$store.dispatch('createWriteOff', detailsDates)
         console.log('Потребности сделаны')
         this.$emit('written-off')

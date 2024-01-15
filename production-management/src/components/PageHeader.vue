@@ -64,7 +64,7 @@ export default {
     },
     async fetchLogsFromServer () {
       try {
-        const response = await axios.get('http://localhost:4444/api/logs')
+        const response = await axios.get('http://localhost:4444/api/logs', { withCredentials: true })
         // фильтрация: только непрочитанные и те, авторство которых не за текущим пользователем
         this.notifications = response.data.logs.filter(notification => {
           return notification.user_id !== this.userId && !notification.is_read

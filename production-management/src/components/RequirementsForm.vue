@@ -62,6 +62,12 @@ export default {
           id: this.currentOrder.id
         })
 
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'созданы потребности заказа ' + this.currentOrder.id + ': ' + this.requirements,
+          date: '22.02.2004'
+        })
+
         console.log('Потребности сделаны')
         this.$emit('requirements-creation')
         this.closePopup()

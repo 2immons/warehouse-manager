@@ -33,14 +33,9 @@ export default {
         console.error('Error fetching orders:', error)
       }
     },
-    async createCounterparty ({ commit }, { name, adress, INN, KPP }) {
+    async createCounterparty ({ commit }, counterparty) {
       try {
-        const response = await axios.post('http://localhost:4444/api/create-counterparty', { withCredentials: true }, {
-          name,
-          adress,
-          INN,
-          KPP
-        })
+        const response = await axios.post('http://localhost:4444/api/create-counterparty', counterparty, { withCredentials: true })
 
         if (response.data.success) {
           const agent = response.data.agent

@@ -14,19 +14,19 @@
           <div class="error-message" v-if="v$.loginFormData.loginUsername.required.$invalid">* Обязательное поле</div>
 
           <label>Пароль:</label>
-          <input v-model="loginFormData.loginPassword" class="form-input" :class="{ 'error-class': v$.loginFormData.loginPassword.$error }"/>
+          <input type="password" v-model="loginFormData.loginPassword" class="form-input" :class="{ 'error-class': v$.loginFormData.loginPassword.$error }"/>
           <div class="error-message" v-if="v$.loginFormData.loginPassword.minLength.$invalid">* Минимум 8 символов</div>
           <div class="error-message" v-if="v$.loginFormData.loginPassword.required.$invalid">* Обязательное поле</div>
 
           <button class="form-button" type="submit">Войти</button>
-          <div class="invalid-credentinals-error" v-if="isLoginFailed">Неверный логин или пароль</div>
+          <div class="invalid-credentinals-error" v-if="isLoginFailed">Неверный логин или пароль!</div>
           <button @click="formToggle" class="form-toggle-button" type="submit">Нет аккаунта? Зарегистрироваться</button>
         </form>
 
         <h2 v-if="isRegistrationFormVisible" class="form-header">Регистрация</h2>
         <form v-if="isRegistrationFormVisible" class="registration-form" @submit.prevent="registerUser">
           <label>Имя пользователя:</label>
-          <input v-model="registrationFormData.registerUsername" class="form-input" :class="{ 'error-class': v$.registrationFormData.registerUsername.$error }"/>
+          <input type="text" v-model="registrationFormData.registerUsername" readonly onfocus="this.removeAttribute('readonly')" class="form-input" :class="{ 'error-class': v$.registrationFormData.registerUsername.$error }"/>
           <div class="error-message" v-if="v$.registrationFormData.registerUsername.minLength.$invalid">* Минимум 6 символов</div>
           <div class="error-message" v-if="v$.registrationFormData.registerUsername.required.$invalid">* Обязательное поле</div>
 
@@ -49,6 +49,7 @@
           <label>Почта:</label>
           <input v-model="registrationFormData.email" type="email" class="form-input" :class="{ 'error-class': v$.registrationFormData.email.$error }"/>
           <div class="error-message" v-if="v$.registrationFormData.email.required.$invalid">* Обязательное поле</div>
+          <div class="error-message" v-if="v$.registrationFormData.email.email.$invalid">* Неверный формат почты</div>
 
           <label>Роль:</label>
           <label><input type="radio" required value="1" v-model="registrationFormData.role">Администратор</label>
@@ -63,7 +64,7 @@
           </div>
 
           <button class="form-button" type="submit">Зарегистрироваться</button>
-          <div class="invalid-credentinals-error" v-if="isRegistrationFailed">Такой пользователь уже существует</div>
+          <div class="invalid-credentinals-error" v-if="isRegistrationFailed">Такой пользователь уже существует!</div>
           <button @click="formToggle" class="form-toggle-button" type="submit">Есть аккаунт? Войти</button>
         </form>
       </div>
@@ -73,10 +74,8 @@
 
 <script>
 import store from '@/store'
-import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, sameAs } from '@vuelidate/validators'
-import Cookies from 'js-cookie'
+import { required, minLength, sameAs, email } from '@vuelidate/validators'
 
 export default {
   data () {
@@ -115,7 +114,7 @@ export default {
         registerPassword: { required, minLength: minLength(8), sameAs: sameAs(this.registrationFormData.registerPasswordRepeat) },
         registerPasswordRepeat: { required, sameAs: sameAs(this.registrationFormData.registerPassword) },
         name: { required, minLength: minLength(3) },
-        email: { required },
+        email: { required, email },
         role: { required }
       }
     }
@@ -135,53 +134,49 @@ export default {
     },
     async loginUser () {
       this.isLoginFailed = false
+      try {
+        const isLFormCorrect = await this.v$.loginFormData.$validate()
+        if (!isLFormCorrect) {
+          return
+        }
+        await this.$store.dispatch('loginUser', {
+          username: this.loginFormData.loginUsername,
+          password: this.loginFormData.loginPassword
+        })
 
-      const isLFormCorrect = await this.v$.loginFormData.$validate()
-      if (!isLFormCorrect) {
-        return
-      }
-
-      const response = await axios.post('http://localhost:4444/api/login', {
-        username: this.loginFormData.loginUsername,
-        password: this.loginFormData.loginPassword
-      })
-
-      if (!response.data.success) {
+        this.$emit('user-logged')
+        this.closePopup()
+      } catch (error) {
+        console.error('Ошибка при создании продукта:', error)
         this.isLoginFailed = true
-        console.log('Не успешная аутентификация')
-        return
       }
-
-      Cookies.set('token', response.data.token)
-      console.log('Успешная аутентификация', Cookies.get('token'), response.data.user)
-      sessionStorage.setItem('username', response.data.user.name)
-      sessionStorage.setItem('userId', response.data.user.id)
-      sessionStorage.setItem('role', response.data.user.role)
-      this.closePopup()
     },
     async registerUser () {
       this.isRegistrationFailed = false
+      try {
+        const isRFormCorrect = await this.v$.registrationFormData.$validate()
+        if (!isRFormCorrect) {
+          return
+        }
+        const response = await this.$store.dispatch('registerUser', {
+          username: this.registrationFormData.registerUsername,
+          name: this.registrationFormData.name,
+          email: this.registrationFormData.email,
+          password: this.registrationFormData.registerPassword,
+          role: this.registrationFormData.role
+        })
 
-      const isRFormCorrect = await this.v$.registrationFormData.$validate()
-      if (!isRFormCorrect) {
-        return
+        if (!response.data.success) {
+          console.log('Не успешная аутентификация')
+          this.isRegistrationFailed = true
+        } else {
+          this.$emit('user-logged')
+          this.isRegistrationFormVisible = false
+          this.closePopup()
+        }
+      } catch (error) {
+        console.error('Ошибка при создании продукта:', error)
       }
-      const response = await axios.post('http://localhost:4444/api/register', {
-        username: this.registrationFormData.registerUsername,
-        name: this.registrationFormData.name,
-        email: this.registrationFormData.email,
-        password: this.registrationFormData.registerPassword,
-        role: this.registrationFormData.role
-      })
-
-      if (!response.data.success) {
-        this.isRegistrationFailed = true
-        console.log('Не успешная регистрация')
-        return
-      }
-
-      console.log('Успешная регистрация', response.data)
-      this.isRegistrationFormVisible = false
     }
   }
 }

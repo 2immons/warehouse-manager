@@ -16,8 +16,7 @@ CREATE TABLE logs (
     id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users(id),
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    operation VARCHAR,
-    is_read BOOLEAN DEFAULT FALSE
+    operation VARCHAR
 );
 
 CREATE TABLE products (
@@ -90,4 +89,10 @@ CREATE TABLE details_write_offs (
 	detail_id INTEGER REFERENCES details(id),
 	write_off_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	quantity INTEGER
+);
+
+CREATE TABLE logs_users (
+	log_id INTEGER REFERENCES logs(id),
+	user_id INTEGER REFERENCES users(id),
+	is_written BOOLEAN DEFAULT FALSE
 );

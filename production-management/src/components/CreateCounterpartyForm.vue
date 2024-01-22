@@ -58,6 +58,12 @@ export default {
           KPP: this.KPP
         })
 
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'создан контр ' + this.name + ' с адресом ' + this.adress,
+          date: '22.02.2004'
+        })
+
         this.isSubmitFormVisible = false
         this.$emit('add-counterparty')
         this.closePopup()

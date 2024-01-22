@@ -23,12 +23,9 @@ export default {
     }
   },
   actions: {
-    async createProduct ({ commit }, { name, description }) {
+    async createProduct ({ commit }, product) {
       try {
-        const response = await axios.post('http://localhost:4444/api/createProduct', { withCredentials: true }, {
-          name,
-          description
-        })
+        const response = await axios.post('http://localhost:4444/api/create-product', product, { withCredentials: true })
 
         if (response.data.success) {
           const product = response.data.product

@@ -20,7 +20,7 @@
               </div>
             </div>
             <div class="footer">
-              <button @click="productProduct">Произвести</button>
+              <button @click="produceProduct">Произвести</button>
               <button @click="closePopup">Close Popup</button>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default {
         console.error('Ошибка при обновлении заказа:', error)
       }
     },
-    productProduct () {
+    produceProduct () {
       this.isSubmitFormVisible = true
     },
     denyActions () {

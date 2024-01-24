@@ -18,7 +18,7 @@ export default {
     updateProduct (state, updatedProduct) {
       const index = state.products.findIndex(product => product.id === updatedProduct.id)
       if (index !== -1) {
-        state.orders.splice(index, 1, updatedProduct)
+        state.products.splice(index, 1, updatedProduct)
       }
     }
   },
@@ -61,8 +61,8 @@ export default {
     },
     async updateProduct ({ commit }, updatedProduct) {
       try {
-        commit('updateProduct', updatedProduct)
         await axios.put('http://localhost:4444/api/update-product', updatedProduct, { withCredentials: true })
+        commit('updateProduct', updatedProduct)
       } catch (error) {
         console.error('Ошибка при обновлении данных заказа:', error)
         throw error

@@ -94,13 +94,15 @@ export default {
     }
   },
   mounted () {
-    this.fetchProductsFromServer()
     this.fetchCounterparties().then(() => {
       this.counterparties = this.getCounterparties
     })
+    this.fetchProducts().then(() => {
+      this.products = this.getProducts
+    })
   },
   computed: {
-    ...mapGetters(['getCounterparties']),
+    ...mapGetters(['getCounterparties', 'getProducts']),
     filteredProducts () {
       return this.products.filter(product =>
         product.name.toLowerCase().includes(this.positions[this.selectedProduct.index].name.toLowerCase())
@@ -113,7 +115,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchCounterparties']),
+    ...mapActions(['fetchCounterparties', 'fetchProducts']),
     async fetchCounterpartiesFromServer () {
       await this.fetchCounterparties().then(() => {
         this.counterparties = this.getCounterparties

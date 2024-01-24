@@ -24,7 +24,8 @@ CREATE TABLE products (
 	name VARCHAR,
     produced INTEGER DEFAULT 0,
     shipped INTEGER DEFAULT 0,
-    readyToShip INTEGER DEFAULT 0
+    ready_to_ship INTEGER DEFAULT 0,
+	description VARCHAR
 );
 
 CREATE TABLE compatibilities (
@@ -72,16 +73,16 @@ CREATE TABLE agents (
 	KPP VARCHAR
 );
 
+CREATE TABLE products_productions (
+	product_id INTEGER REFERENCES products(id),
+	production_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	quantity INTEGER
+);
+
 CREATE TABLE products_shipping (
 	product_id INTEGER REFERENCES details(id),
 	order_id INTEGER REFERENCES orders(id),
 	shipping_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	quantity INTEGER
-);
-
-CREATE TABLE products_productions (
-	product_id INTEGER REFERENCES products(id),
-	production_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	quantity INTEGER
 );
 
@@ -93,6 +94,5 @@ CREATE TABLE details_write_offs (
 
 CREATE TABLE logs_users (
 	log_id INTEGER REFERENCES logs(id),
-	user_id INTEGER REFERENCES users(id),
-	is_written BOOLEAN DEFAULT FALSE
+	user_id INTEGER REFERENCES users(id)
 );

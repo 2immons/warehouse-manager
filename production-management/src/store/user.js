@@ -34,7 +34,7 @@ export default {
     },
     async loginUser ({ commit }, user) {
       try {
-        const response = await axios.get('http://localhost:4444/api/login', user)
+        const response = await axios.post('http://localhost:4444/api/login', user)
 
         if (!response.data.success) {
           console.log('Не успешная аутентификация')

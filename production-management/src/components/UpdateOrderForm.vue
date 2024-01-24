@@ -182,9 +182,9 @@ export default {
       this.positions.push(newPosition)
     },
     removePositionRow (item) {
-      const index = this.products.indexOf(item)
+      const index = this.positions.indexOf(item)
       if (index !== -1) {
-        this.products.splice(index, 1)
+        this.positions.splice(index, 1)
       }
     },
     closePopup () {

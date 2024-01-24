@@ -32,7 +32,7 @@
                 </div>
                 <input v-if="isFirstStep" class="compability-popup__input" type="text" @input="handleSearch" v-model="searchText" placeholder="Начните вводить наименование и/или выберите из списка...">
                 <div v-if="isFirstStep" class="products-list2">
-                  <button @click="goToDetails(product)" class="products-list2__item" v-for="product in filteredItems" :key="product.id">
+                  <button @click="goToDetails(product)" class="products-list2__item" v-for="product in products" :key="product.id">
                     <p>{{ product.name }}</p>
                   </button>
                 </div>
@@ -97,11 +97,11 @@
                 <div class="table__row" v-for="(item, index) in positions" :key="index">
                   <div class="table-cell">{{ index+1 }}</div>
                   <div class="table-cell">
-                    <input class="table-cell-input" type="text" v-model="item.name" @input="onProductNameInput(index)" @focus="showProductsList(index)" @blur="hideProductsList(index)" placeholder="Начните вводить наименование и выберите из списка...">
-                    <div class="products-list-overlay" v-if="isInputActive || (selectedProduct && index === selectedProduct.index)">
+                    <input class="table-cell-input" type="text" v-model="item.name" @input="onDetailNameInput(index)" @focus="showDetailsList(index)" @blur="hideDetailsList(index)" placeholder="Начните вводить наименование и выберите из списка...">
+                    <div class="products-list-overlay" v-if="isInputActive || (selectedDetail && index === selectedDetail.index)">
                       <ul class="products-list">
-                        <li class="products-list__item" v-for="product in filteredProducts" :key="product.id" @click="selectProduct(index, product)">
-                          {{ product.name }}
+                        <li class="products-list__item" v-for="detail in getDetails" :key="detail.id" @click="selectDetail(index, detail)">
+                          {{ detail.name }}
                         </li>
                       </ul>
                     </div>
@@ -115,7 +115,7 @@
                   <div class="table-cell">
                     <input class="table-cell-input" type="text" v-model="item.needs">
                   </div>
-                  <div class="table-cell">{{ item.supplied - item.written_off }}</div>
+                  <div class="table-cell">{{ (item.supplied !== '') ? '' : item.supplied - item.written_off  }}</div>
                   <div class="table-cell">{{ (item.price !== '') ? item.price + ' руб': '' }}</div>
                   <div class="table-cell">
                     <input class="table-cell-input" type="number" v-model="item.quantity">
@@ -158,7 +158,6 @@ export default {
       documentNumber: '',
       sentBy: '',
       acceptedBy: '',
-      filteredItems: [],
       products: [],
       positions: [],
       details: []
@@ -166,7 +165,7 @@ export default {
   },
   mounted () {
     this.fetchProducts().then(() => {
-      this.filteredItems = this.getProducts
+      this.products = this.getProducts
     })
     this.fetchDetails().then(() => {
       this.details = this.getDetails
@@ -208,7 +207,7 @@ export default {
     },
     async fetchProductsFromServer () {
       await this.fetchProducts().then(() => {
-        this.filteredItems = this.getProducts
+        this.products = this.getProducts
       })
     },
     async fetchDetailsFromServer () {
@@ -235,6 +234,29 @@ export default {
       this.isFirstStep = true
       this.details = this.getDetails
     },
+    onDetailNameInput (index) {
+      this.selectedDetail = { index }
+    },
+    showDetailsList (index) {
+      this.isInputActive = true
+      this.selectedDetail = { index }
+    },
+    hideDetailsList (index) {
+      this.isInputActive = false
+      this.selectedDetail = { index }
+    },
+    selectDetail (index, detail) {
+      this.positions[index].name = detail.name
+      this.positions[index].detail_id = detail.id
+      this.positions[index].unit = detail.unit
+      this.positions[index].needs = 'Производство ' + this.currentProduct.name
+      this.positions[index].operationType = 'Списание на производство'
+      this.positions[index].price = detail.price
+      this.positions[index].supplier_name = detail.supplier_name
+      this.positions[index].supply_date = detail.supply_date
+      this.positions[index].upd_sf_number = detail.upd_sf_number
+      this.selectedDetail = null
+    },
     onProductNameInput (index) {
       this.selectedProduct = { index }
     },
@@ -252,12 +274,12 @@ export default {
       this.selectedProduct = null
     },
     handleSearch () {
-      console.log(this.filteredItems)
+      console.log(this.products)
       const searchText = this.searchText.toLowerCase()
       if (searchText === '') {
-        this.filteredItems = this.getProducts
+        this.products = this.getProducts
       } else {
-        this.filteredItems = this.filteredItems.filter(item => {
+        this.products = this.products.filter(item => {
           return (
             item.name.toLowerCase().includes(searchText)
           )

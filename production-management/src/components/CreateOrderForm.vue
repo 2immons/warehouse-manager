@@ -73,7 +73,6 @@
 
 <script>
 import SubmitForm from './SubmitForm.vue'
-import axios from 'axios'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -149,14 +148,6 @@ export default {
       this.positions[index].name = product.name
       this.positions[index].product_id = product.id
       this.selectedProduct = null
-    },
-    async fetchProductsFromServer () {
-      try {
-        const response = await axios.get('http://localhost:4444/api/products')
-        this.products = response.data.products
-      } catch (error) {
-        console.error('Error fetching products:', error)
-      }
     },
     addPositionRow () {
       const newPosition = {

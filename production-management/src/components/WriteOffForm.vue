@@ -50,7 +50,7 @@
                       <div class="table-cell-header">Поставщик</div>
                       <div class="table-cell-header">Выбрать</div>
                   </div>
-                  <div class="table__row" v-for="(item, index) in details" :key="index">
+                  <div class="table__row" v-for="(item, index) in this.details" :key="index">
                     <div class="table-cell">{{ index+1 }}</div>
                     <div class="table-cell">{{ item.name }}</div>
                     <div class="table-cell">{{ item.unit }}</div>

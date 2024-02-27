@@ -25,19 +25,31 @@
               <input v-model="searchText" @input="handleSearch" type="text" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="text-search__text" :disabled="isSearchInputDisabled">
             </div>
           </div>
-          <div class="date-searches">
+          <div class="date-search">
+            <div class="text-search-button-wrapper">
+              <button class="buttons__btn buttons__btn--search-btn" @click="toggleDateSearch">{{ dateSearchButtonText }}</button>
+              <Transition :name="showDropDown ? 'dl' : null">
+                <div class="dropdown-list" v-if="showDateDropDown">
+                  <button class="search-item-button" @click="handleDateSearchItemClick('Дата производства')">Дата производства</button>
+                  <button class="search-item-button" @click="handleDateSearchItemClick('Дата отгрузки')">Дата отгрузки</button>
+                  <button class="search-item-button-exit" @click="closeDateSearch">Закрыть поиск</button>
+                </div>
+              </Transition>
+            </div>
+            <div v-if="isDateSearchInputVisible" class="date-searches">
               <div class="date-search">
                 <label for="">С</label>
-                <input type="date" class="date-search__date">
+                <input v-model="searchDateStart" @input="handleDateSearch" type="date" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="date-search__date" :disabled="isSearchInputDisabled">
               </div>
               <div class="date-search">
                 <label for="">До</label>
-                <input type="date" class="date-search__date">
+                <input v-model="searchDateEnd" @input="handleDateSearch" type="date" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="date-search__date" :disabled="isSearchInputDisabled">
               </div>
+            </div>
           </div>
           <div class="buttons">
-              <button class="buttons__btn" @click="openCreateProductForm">Создать оборудование</button>
-              <button class="buttons__btn" @click="openSubmitForm">Подтвердить готовность</button>
+            <button class="buttons__btn" @click="openCreateProductForm">Создать оборудование</button>
+            <button class="buttons__btn" @click="openSubmitForm">Подтвердить готовность</button>
           </div>
         </div>
         <div class="table-section__container">
@@ -133,11 +145,18 @@ export default {
         order: 1
       },
       isSearchInputVisible: false,
+      isDateSearchInputVisible: false,
       isSearchInputDisabled: true,
+      isDateSearchInputDisabled: true,
       showDropDown: false,
+      showDateDropDown: false,
       searchButtonText: 'Поиск',
+      dateSearchButtonText: 'Дата',
       searchColumn: '',
+      dateSearchColumn: '',
       searchText: '',
+      searchDateStart: '',
+      searchDateEnd: '',
       currentProduct: null,
       isProduceFormVisible: false,
       isCreateProductFormVisible: false,
@@ -150,7 +169,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProducts']),
+    ...mapGetters(['getProducts', 'getShippings', 'getProductions']),
     sortedItems () {
       return this.filteredItems.slice().sort((a, b) => {
         const field = this.sort.field
@@ -181,7 +200,7 @@ export default {
     window.removeEventListener('resize', this.handleWindowResizeForSidebar)
   },
   methods: {
-    ...mapActions(['fetchProducts']),
+    ...mapActions(['fetchProducts', 'fetchShippings', 'fetchProductions']),
     handleSearch () {
       const searchText = this.searchText.toLowerCase()
       if (searchText === '') {
@@ -201,6 +220,68 @@ export default {
             return (
               item.name.toLowerCase().includes(searchText)
             )
+          })
+          break
+      }
+    },
+    async handleDateSearch () {
+      const searchDateStart = new Date(this.searchDateStart)
+      const searchDateEnd = new Date(this.searchDateEnd)
+      let dateItemsProductions = []
+      let dateItemsShippings = []
+
+      await this.fetchProductions().then(() => {
+        dateItemsProductions = this.getProductions // detail_id, write_off_date, quantity
+      })
+
+      await this.fetchShippings().then(() => {
+        dateItemsShippings = this.getShippings // detail_id, write_off_date, quantity
+      })
+
+      if (searchDateStart === '' || searchDateEnd === '') {
+        this.filteredItems = this.getProducts
+        return
+      }
+      let resultArray = []
+      switch (this.dateSearchColumn) {
+        case 'Дата производства':
+          dateItemsProductions = this.getProductions.filter(item => new Date(item.production_date) >= searchDateStart && new Date(item.production_date) <= searchDateEnd)
+          resultArray = Object.values(
+            dateItemsProductions.reduce((acc, item) => {
+              // eslint-disable-next-line
+              const { product_id, quantity } = item
+              acc[product_id] = acc[product_id] || { ...item, quantity: 0 }
+              acc[product_id].quantity += quantity
+              return acc
+            }, {})
+          )
+          dateItemsProductions = resultArray
+          this.filteredItems = this.getProducts.filter(item => dateItemsProductions.some(dateItem => dateItem.product_id === item.id))
+          this.filteredItems.forEach(filteredItem => {
+            const correspondingDateItem = dateItemsProductions.find(dateItem => dateItem.product_id === filteredItem.id)
+            if (correspondingDateItem) {
+              filteredItem.produced = correspondingDateItem.quantity
+            }
+          })
+          break
+        case 'Дата отгрузки':
+          dateItemsShippings = this.getShippings.filter(item => new Date(item.shipping_date) >= searchDateStart && new Date(item.shipping_date) <= searchDateEnd)
+          resultArray = Object.values(
+            dateItemsShippings.reduce((acc, item) => {
+              // eslint-disable-next-line
+              const { product_id, quantity } = item
+              acc[product_id] = acc[product_id] || { ...item, quantity: 0 }
+              acc[product_id].quantity += quantity
+              return acc
+            }, {})
+          )
+          dateItemsShippings = resultArray
+          this.filteredItems = this.getProducts.filter(item => dateItemsShippings.some(dateItem => dateItem.product_id === item.id))
+          this.filteredItems.forEach(filteredItem => {
+            const correspondingDateItem = dateItemsShippings.find(dateItem => dateItem.product_id === filteredItem.id)
+            if (correspondingDateItem) {
+              filteredItem.shipped = correspondingDateItem.quantity
+            }
           })
           break
       }
@@ -226,18 +307,40 @@ export default {
         this.isSearchInputVisible = true
       }
     },
+    toggleDateSearch () { // переделать пересмотреть
+      this.showDateDropDown = !this.showDateDropDown
+      if (this.isSearchInputVisible) {
+        this.isDateSearchInputDisabled = false
+      } else {
+        this.isDateSearchInputVisible = true
+      }
+    },
     closeSearch () {
       this.isSearchInputVisible = false
       this.showDropDown = !this.showDropDown
       this.searchColumn = 'Поиск'
       this.isSearchInputDisabled = true
+      this.filteredItems = this.getProducts
+    },
+    closeDateSearch () {
+      this.isDateSearchInputVisible = false
+      this.showDateDropDown = !this.showDateDropDown
+      this.dateSearchButtonText = 'Дата'
+      this.isDateSearchInputDisabled = true
+      this.filteredItems = this.getProducts
     },
     handleItemClick (content) {
       this.searchButtonText = content
       this.isSearchInputVisible = true
       this.searchColumn = content
-      console.log(this.searchColumn)
       this.showDropDown = false
+      this.isSearchInputDisabled = false
+    },
+    handleDateSearchItemClick (content) {
+      this.dateSearchButtonText = content
+      this.isDateSearchInputVisible = true
+      this.dateSearchColumn = content
+      this.showDateDropDown = false
       this.isSearchInputDisabled = false
     },
     openProduceForm (item) {

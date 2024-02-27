@@ -29,6 +29,14 @@ export default {
         console.error('Ошибка при создании заказа даты:', error)
         throw error
       }
+    },
+    async fetchWriteOffs ({ commit }) {
+      try {
+        const response = await axios.get('http://localhost:4444/api/products-write-offs', { withCredentials: true })
+        commit('setWriteOffs', response.data.writeOffs)
+      } catch (error) {
+        console.error('Error fetching orders:', error)
+      }
     }
   },
   getters: {

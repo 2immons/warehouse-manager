@@ -30,21 +30,34 @@
                       <input v-model="searchText" @input="handleSearch" type="text" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="text-search__text" :disabled="isSearchInputDisabled">
                     </div>
                   </div>
-                  <div class="date-searches">
+                  <div class="date-search">
+                    <div class="text-search-button-wrapper">
+                      <button class="buttons__btn buttons__btn--search-btn" @click="toggleDateSearch">{{ dateSearchButtonText }}</button>
+                      <Transition :name="showDropDown ? 'dl' : null">
+                        <div class="dropdown-list" v-if="showDateDropDown">
+                          <button class="search-item-button" @click="handleDateSearchItemClick('Дата заказа')">Дата заказа</button>
+                          <button class="search-item-button" @click="handleDateSearchItemClick('Исполнить до')">Исполнить до</button>
+                          <button class="search-item-button" @click="handleDateSearchItemClick('Дата отгрузки')">Дата отгрузки</button>
+                          <button class="search-item-button-exit" @click="closeDateSearch">Закрыть поиск</button>
+                        </div>
+                      </Transition>
+                    </div>
+                    <div v-if="isDateSearchInputVisible" class="date-searches">
                       <div class="date-search">
                         <label for="">С</label>
-                        <input type="date" class="date-search__date">
+                        <input v-model="searchDateStart" @input="handleDateSearch" type="date" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="date-search__date" :disabled="isSearchInputDisabled">
                       </div>
                       <div class="date-search">
                         <label for="">До</label>
-                        <input type="date" class="date-search__date">
+                        <input v-model="searchDateEnd" @input="handleDateSearch" type="date" :placeholder="isSearchInputDisabled ? 'Выберите колонку' : 'Поиск'" class="date-search__date" :disabled="isSearchInputDisabled">
                       </div>
-                  </div>
-                    <div class="buttons">
-                      <button class="buttons__btn" @click="toggleShippedVisibility">{{ this.notShippedVisible ? 'Скрыть отгруженные' : 'Показать отгруженные' }}</button>
-                      <button class="buttons__btn" @click="openCreateOrderForm">Разместить заказ</button>
-                      <button class="buttons__btn" @click="openSubmitForm">Подтвердить готовность</button>
                     </div>
+                  </div>
+                  <div class="buttons">
+                    <button class="buttons__btn" @click="toggleShippedVisibility">{{ this.notShippedVisible ? 'Скрыть отгруженные' : 'Показать отгруженные' }}</button>
+                    <button class="buttons__btn" @click="openCreateOrderForm">Разместить заказ</button>
+                    <button class="buttons__btn" @click="openSubmitForm">Подтвердить готовность</button>
+                  </div>
                 </div>
                 <div class="table-section__container">
                   <div class="table">
@@ -165,11 +178,18 @@ export default {
   data () {
     return {
       isSearchInputVisible: false,
+      isDateSearchInputVisible: false,
       isSearchInputDisabled: true,
+      isDateSearchInputDisabled: true,
       showDropDown: false,
+      showDateDropDown: false,
       searchButtonText: 'Поиск',
+      dateSearchButtonText: 'Дата',
       searchColumn: '',
+      dateSearchColumn: '',
       searchText: '',
+      searchDateStart: '',
+      searchDateEnd: '',
       currentOrder: null,
       isSubmitFormVisible: false,
       isShippingFormVisible: false,
@@ -282,6 +302,25 @@ export default {
         return `${day}.${month}.${year}`
       }
     },
+    handleDateSearch () {
+      const searchDateStart = new Date(this.searchDateStart)
+      const searchDateEnd = new Date(this.searchDateEnd)
+      if (searchDateStart === '' || searchDateEnd === '') {
+        this.filteredItems = this.getOrders
+        return
+      }
+      switch (this.dateSearchColumn) {
+        case 'Дата заказа':
+          this.filteredItems = this.getOrders.filter(item => new Date(item.creation_date) >= searchDateStart && new Date(item.creation_date) <= searchDateEnd)
+          break
+        case 'Исполнить до':
+          this.filteredItems = this.getOrders.filter(item => new Date(item.deadline) >= searchDateStart && new Date(item.deadline) <= searchDateEnd)
+          break
+        case 'Дата отгрузки': // TODO
+          this.filteredItems = this.getOrders.filter(item => new Date(item.deadline) >= searchDateStart && new Date(item.deadline) <= searchDateEnd)
+          break
+      }
+    },
     toggleSort (field) {
       if (this.sort.field === field) {
         this.sort.order = -this.sort.order
@@ -333,18 +372,40 @@ export default {
         this.isSearchInputVisible = true
       }
     },
+    toggleDateSearch () { // переделать пересмотреть
+      this.showDateDropDown = !this.showDateDropDown
+      if (this.isSearchInputVisible) {
+        this.isDateSearchInputDisabled = false
+      } else {
+        this.isDateSearchInputVisible = true
+      }
+    },
     closeSearch () {
       this.isSearchInputVisible = false
       this.showDropDown = !this.showDropDown
       this.searchColumn = 'Поиск'
       this.isSearchInputDisabled = true
+      this.filteredItems = this.getOrders
+    },
+    closeDateSearch () {
+      this.isDateSearchInputVisible = false
+      this.showDateDropDown = !this.showDateDropDown
+      this.dateSearchButtonText = 'Дата'
+      this.isDateSearchInputDisabled = true
+      this.filteredItems = this.getOrders
     },
     handleItemClick (content) {
       this.searchButtonText = content
       this.isSearchInputVisible = true
       this.searchColumn = content
-      console.log(this.searchColumn)
       this.showDropDown = false
+      this.isSearchInputDisabled = false
+    },
+    handleDateSearchItemClick (content) {
+      this.dateSearchButtonText = content
+      this.isDateSearchInputVisible = true
+      this.dateSearchColumn = content
+      this.showDateDropDown = false
       this.isSearchInputDisabled = false
     },
     openShippingForm (item) {

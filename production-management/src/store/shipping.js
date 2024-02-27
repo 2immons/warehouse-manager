@@ -30,6 +30,14 @@ export default {
         console.error('Ошибка при создании заказа даты:', error)
         throw error
       }
+    },
+    async fetchShippings ({ commit }) {
+      try {
+        const response = await axios.get('http://localhost:4444/api/products-shippings', { withCredentials: true })
+        commit('setShippings', response.data.shippings)
+      } catch (error) {
+        console.error('Error fetching orders:', error)
+      }
     }
   },
   getters: {

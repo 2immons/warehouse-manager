@@ -2,19 +2,23 @@ import axios from 'axios'
 
 export default {
   state: {
+    notifications: [],
     logs: []
   },
   mutations: {
+    setNotifications (state, notifications) {
+      state.notifications = notifications
+    },
     setLogs (state, logs) {
       state.logs = logs
     },
     removeNotification (state, payload) {
       if (payload.removeAll) {
-        state.logs.splice(0, state.logs.length)
+        state.notifications.splice(0, state.notifications.length)
       } else {
         const index = state.logs.findIndex(log => log.id === payload.notification.id)
         if (index !== -1) {
-          state.logs.splice(index, 1)
+          state.notifications.splice(index, 1)
         }
       }
     }
@@ -23,7 +27,15 @@ export default {
     async fetchNotifications ({ commit }) {
       try {
         const response = await axios.get('http://localhost:4444/api/notifications', { withCredentials: true })
-        commit('setLogs', response.data.notifications)
+        commit('setNotifications', response.data.notifications)
+      } catch (error) {
+        console.error('Error fetching orders:', error)
+      }
+    },
+    async fetchLogs ({ commit }) {
+      try {
+        const response = await axios.get('http://localhost:4444/api/logs', { withCredentials: true })
+        commit('setLogs', response.data.logs)
       } catch (error) {
         console.error('Error fetching orders:', error)
       }
@@ -59,7 +71,8 @@ export default {
     }
   },
   getters: {
-    getNotifications: (state) => state.logs,
-    getNotificationsCount: (state) => state.logs.length
+    getNotifications: (state) => state.notifications,
+    getLogs: (state) => state.logs,
+    getNotificationsCount: (state) => state.notifications.length
   }
 }

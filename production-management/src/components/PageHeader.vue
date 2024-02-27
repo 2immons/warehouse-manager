@@ -124,7 +124,7 @@ export default {
           this.headerText = 'ЗАДАНИЯ ДЛЯ ПРОИЗВОДСТВА'
           break
         case '/logs':
-          this.headerText = 'ЗАКАЗЫ'
+          this.headerText = 'ЖУРНАЛ ИЗМЕНЕНИЙ'
           break
         case '/counterparties':
           this.headerText = 'КОНТРАГЕНТЫ'

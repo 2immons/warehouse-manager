@@ -18,6 +18,9 @@
                 <div class="dropdown-list" v-if="showDropDown">
                   <button class="search-item-button" @click="handleItemClick('Номер №')">Номер №</button>
                   <button class="search-item-button" @click="handleItemClick('Наименование')">Наименование</button>
+                  <button class="search-item-button" @click="handleItemClick('Адрес')">Адрес</button>
+                  <button class="search-item-button" @click="handleItemClick('ИНН')">ИНН</button>
+                  <button class="search-item-button" @click="handleItemClick('КПП')">КПП</button>
                   <button class="search-item-button-exit" @click="closeSearch">Закрыть поиск</button>
                 </div>
               </Transition>
@@ -184,6 +187,27 @@ export default {
           this.filteredItems = this.getCounterparties.filter(item => {
             return (
               item.name.toLowerCase().includes(searchText)
+            )
+          })
+          break
+        case 'Адрес':
+          this.filteredItems = this.getCounterparties.filter(item => {
+            return (
+              item.adress.toLowerCase().includes(searchText)
+            )
+          })
+          break
+        case 'ИНН':
+          this.filteredItems = this.getCounterparties.filter(item => {
+            return (
+              item.inn.toLowerCase().includes(searchText)
+            )
+          })
+          break
+        case 'КПП':
+          this.filteredItems = this.getCounterparties.filter(item => {
+            return (
+              item.kpp.toLowerCase().includes(searchText)
             )
           })
           break

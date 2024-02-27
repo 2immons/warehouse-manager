@@ -11,25 +11,12 @@ export default {
     }
   },
   actions: {
-    // async fetchUsers ({ commit }) {
-    //   try {
-    //     const response = await axios.get('http://localhost:4444/api/details', { withCredentials: true })
-    //     commit('setDetails', response.data.details)
-    //   } catch (error) {
-    //     console.error('Error fetching orders:', error)
-    //   }
-    // },
-    async updateDetails ({ commit }, updatedDetails) {
+    async fetchUsers ({ commit }) {
       try {
-        const responseProducts = await axios.put('http://localhost:4444/api/update-details', updatedDetails, { withCredentials: true })
-        console.log('Подтверждено готовность', responseProducts.data.success)
-
-        // const responseLogs = await axios.post('http://localhost:4444/api/create-logs', state.logs)
-        // console.log('Создан лог', responseLogs.data.success)
-        commit('updateDetails', updatedDetails)
+        const response = await axios.get('http://localhost:4444/api/users', { withCredentials: true })
+        commit('setUsers', response.data.users)
       } catch (error) {
-        console.error('Ошибка при отправке данных на сервер:', error)
-        throw error
+        console.error('Error fetching orders:', error)
       }
     },
     async loginUser ({ commit }, user) {
@@ -64,6 +51,6 @@ export default {
     }
   },
   getters: {
-    // getDetails: (state) => state.details
+    getUsers: (state) => state.users
   }
 }

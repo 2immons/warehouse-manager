@@ -15,7 +15,7 @@
             <input v-model="description" type="text">
           </form>
           <div class="footer">
-            <button @click="createProduct">Создать образец<br>продукта</button>
+            <button class="buttons__btn" @click="createProduct">Создать образец<br>продукта</button>
           </div>
           <!-- переписать в нормальный вид -->
         </div>
@@ -46,6 +46,14 @@ export default {
         await this.$store.dispatch('createProduct', {
           name: this.name,
           description: this.description
+        })
+
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'создан продукт ' + this.name,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
         })
 
         this.isSubmitFormVisible = false

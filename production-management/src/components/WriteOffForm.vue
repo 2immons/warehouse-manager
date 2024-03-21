@@ -325,7 +325,16 @@ export default {
         })
         await this.$store.dispatch('updateDetails', updatedDetails)
         await this.$store.dispatch('createWriteOff', detailsDates)
-        console.log('Потребности сделаны')
+
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'списано ' + this.positions.length + ' деталей',
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
+        })
+
+        this.isSubmitFormVisible = false
         this.$emit('written-off')
         this.closePopup()
       } catch (error) {
@@ -425,6 +434,17 @@ export default {
   display: flex
   flex-direction: column
   align-items: flex-start
+  margin: 20px 0px 20px 0px
+  gap: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    align-items: center
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
 .positions
   display: flex
   flex-direction: column

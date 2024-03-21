@@ -8,21 +8,18 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              Общая информация
+              Ввести или обновить потребности производства
             </div>
             <div class="positions">
-              <div class="positions__header">
-                <h3>Заголовок</h3>
-              </div>
               <div class="positions__content">
-                <input v-model="this.requirements" type="text">
-                <p>Текущие запросы:</p>
+                <textarea v-model="this.requirements" type="text"></textarea>
+                <p>Текущие потребности:</p>
                 <p>{{ this.currentOrder.requirements }}</p>
               </div>
             </div>
             <div class="footer">
-              <button @click="addRequirements">Добавить</button>
-              <button @click="closePopup">Close Popup</button>
+              <button class="buttons__btn" @click="addRequirements">Добавить</button>
+              <button class="buttons__btn" @click="closePopup">Закрыть</button>
             </div>
           </div>
         </div>
@@ -62,12 +59,15 @@ export default {
           id: this.currentOrder.id
         })
 
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
         await this.$store.dispatch('createLog', {
           user_id: Number(sessionStorage.getItem('userId')),
-          operation: 'созданы потребности заказа ' + this.currentOrder.id + ': ' + this.requirements,
-          date: '22.02.2004'
+          operation: 'созданы/отредактированы потребности для заказа №' + this.currentOrder.id,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
         })
 
+        this.isSubmitFormVisible = false
         console.log('Потребности сделаны')
         this.$emit('requirements-creation')
         this.closePopup()
@@ -102,7 +102,7 @@ export default {
   position: absolute
   max-width: 1300px
   width: 67%
-  height: 750px
+  height: fit-content
   background: #fff
   padding: 20px
   border-radius: 8px

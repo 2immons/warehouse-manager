@@ -12,7 +12,7 @@
               <label for="">Счет-фактура №</label>
               <input class="input-short" v-model="this.UPD_SF_Number" type="text">
               <label for="">от</label>
-              <input type="date" v-model="this.UPD_SF_date">
+              <input type="date" v-model="this.UPD_SF_date" required>
             </div>
             <div class="input-wrapper">
               <label for="">Статус документа (1 СФ+ПД(а), 2 ПД(а) )</label>
@@ -57,17 +57,16 @@
               <input v-model="this.client" type="checkbox">
             </div>
             <div class="input-line">
-              <div class="input-column-left">
-                <div class="input-wrapper">
-                  <label for="">Выбрать склад</label>
-                  <input class="input-short" v-model="this.client" type="text">
-                </div>
+              <div class="input-wrapper">
+                <label for="">Выбрать склад</label>
+                <input class="input-short" v-model="this.client" type="text">
               </div>
-              <div class="input-column-right">
-                <div class="input-wrapper">
-                  <label for="">Дата</label>
-                  <input class="input-short" v-model="this.date" type="date">
-                </div>
+              <div class="input-wrapper">
+                <label for="">Дата</label>
+                <input class="input-short" v-model="this.date" type="date" required>
+              </div>
+              <div class="input-wrapper">
+                <input type="file" @change="handleFileUpload" />
               </div>
             </div>
             <button class="buttons__btn" @click="addPositionRow">Добавить позицию вручную</button>
@@ -146,7 +145,6 @@
           <div class="footer">
             <button class="buttons__btn" @click="createOrder">Внести поставку</button>
             <button class="buttons__btn" @click="closePopup">Закрыть</button>
-            <input type="file" @change="handleFileUpload" />
           </div>
         </div>
       </div>
@@ -385,11 +383,20 @@ export default {
       try {
         await this.$store.dispatch('createDetails', details)
 
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'внесена поставка ' + this.positions.length + ' позиций, номер УПД-СФ: ' + this.UPD_SF_number,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
+        })
+
+        this.isSubmitFormVisible = false
         console.log('Потребности сделаны')
         this.$emit('supply-entered')
         this.closePopup()
       } catch (error) {
-        console.error('Ошибка при обновлении заказа:', error)
+        console.error('Ошибка при внесении поставки:', error)
       }
     },
     denyActions () {
@@ -500,15 +507,7 @@ export default {
   flex-direction: row
   gap: 10px
   width: 100%
-.input-column-left
-  display: flex
-  flex-direction: row
-  width: 25%
-.input-column-right
-  display: flex
-  flex-direction: row
-  width: 75%
-  gap: 5px
+  align-items: center
 .input-wrapper
   display: flex
   flex-direction: column

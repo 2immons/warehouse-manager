@@ -12,7 +12,7 @@
             <input v-model="this.orderNumber" type="text">
             <label for="">Клиент</label>
             <div class="table-cell">
-              <input class="table-cell-input" type="text" v-model="this.clientName" @input="onClientInput" @focus="showCounterpartiesList" @blur="hideCounterpartiesList" placeholder="Начните вводить наименование и выберите из списка...">
+              <input type="text" v-model="this.clientName" @input="onClientInput" @focus="showCounterpartiesList" @blur="hideCounterpartiesList" placeholder="Начните вводить наименование и выберите из списка...">
               <div class="clients-list-overlay" v-if="isClientInputActive">
                 <ul class="clients-list">
                   <li class="clients-list__item" v-for="counterparty in filteredCounterparties" :key="counterparty.id" @click="selectCounterparty(counterparty)">
@@ -27,7 +27,7 @@
             <input v-model="this.deadline" type="date">
             <label for="">№ договора о поставке</label>
             <input v-model="this.documentNumber" placeholder="Не указан" type="text">
-            <button @click="addPositionRow">Добавить позицию</button>
+            <button class="buttons__btn" @click="addPositionRow">Добавить позицию</button>
           </div>
           <div class="positions">
             <div class="positions__header">
@@ -64,7 +64,8 @@
             </div>
           </div>
           <div class="footer">
-            <button @click="createOrder">Разместить задание</button>
+            <button class="buttons__btn" @click="createOrder">Разместить задание</button>
+            <button class="buttons__btn" @click="closePopup">Закрыть</button>
           </div>
         </div>
       </div>
@@ -187,6 +188,14 @@ export default {
           positions: this.positions
         })
 
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'создан заказ ' + this.orderNumber + ' с ' + this.positions.length + ' позициями',
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
+        })
+
         this.isSubmitFormVisible = false
         this.$emit('order-creation')
         this.closePopup()
@@ -237,6 +246,17 @@ export default {
   display: flex
   flex-direction: column
   align-items: flex-start
+  margin: 20px 0px 20px 0px
+  gap: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    align-items: center
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
 .positions
   display: flex
   flex-direction: column

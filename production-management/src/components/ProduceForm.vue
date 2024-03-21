@@ -20,8 +20,8 @@
               </div>
             </div>
             <div class="footer">
-              <button @click="produceProduct">Произвести</button>
-              <button @click="closePopup">Close Popup</button>
+              <button class="buttons__btn" @click="produceProduct">Произвести</button>
+              <button class="buttons__btn" @click="closePopup">Закрыть</button>
             </div>
           </div>
         </div>
@@ -57,7 +57,16 @@ export default {
           production_date: this.date,
           quantity: this.producedQuantity
         })
-        console.log('Продукт произведен')
+
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'произведен продукт: ' + this.currentProduct.name + ' в количестве: ' + this.producedQuantity,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
+        })
+
+        this.isSubmitFormVisible = false
         this.$emit('product-creation')
         this.closePopup()
       } catch (error) {
@@ -97,7 +106,7 @@ export default {
   position: absolute
   max-width: 1300px
   width: 67%
-  height: 750px
+  height: fit-content
   background: #fff
   padding: 20px
   border-radius: 8px

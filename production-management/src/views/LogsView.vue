@@ -195,13 +195,13 @@ export default {
       }
     },
     formatDateTime (dateTimeString) {
-      const originalDate = new Date(dateTimeString)
-      const day = originalDate.getDate().toString().padStart(2, '0')
-      const month = (originalDate.getMonth() + 1).toString().padStart(2, '0')
-      const year = originalDate.getFullYear().toString().padStart(2, '0')
-
-      const formattedDate = `${day}.${month}.${year}`
-      return formattedDate
+      const date = new Date(dateTimeString)
+      const hours = ('0' + date.getHours()).slice(-2)
+      const minutes = ('0' + date.getMinutes()).slice(-2)
+      const day = ('0' + date.getDate()).slice(-2)
+      const month = ('0' + (date.getMonth() + 1)).slice(-2)
+      const year = date.getFullYear()
+      return hours + ':' + minutes + ' ' + day + '.' + month + '.' + year
     },
     async handleDateSearch () {
       const searchDateStart = new Date(this.searchDateStart)

@@ -21,7 +21,8 @@
             <input v-model="KPP" type="text">
           </form>
           <div class="footer">
-            <button @click="updateCounterparty">Обновить данные контрагента</button>
+            <button class="buttons__btn" @click="updateCounterparty">Обновить</button>
+            <button class="buttons__btn" @click="closePopup">Закрыть</button>
           </div>
           <!-- переписать в нормальный вид -->
         </div>
@@ -61,6 +62,14 @@ export default {
           INN: this.INN,
           KPP: this.KPP,
           id: this.currentCounterparty.id
+        })
+
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'обновлен контрагент ' + this.name,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
         })
 
         this.isSubmitFormVisible = false

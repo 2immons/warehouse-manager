@@ -540,6 +540,12 @@ export default {
 .table-cell--input
   flex-direction: row
 .table-cell-input
+  display: flex
+  background-color: #fff
+  border: 1px solid #ccc
+  border-radius: 4px
+  padding: 0 10px
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
   width: 100%
   cursor: text
 .table-cell-header

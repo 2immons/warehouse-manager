@@ -123,9 +123,13 @@ export default {
         width: 280px
 .sidebar-button
     position: absolute
+    border: 1px solid rgba(0,0,0,0.30)
+    background-color: rgb(255, 233, 223)
     align-self: flex-end
     width: 10%
+    cursor: pointer
     margin: 10px 10px
+    border-radius: 15px
 .sidebar-header
     display: flex
     flex-direction: column

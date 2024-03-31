@@ -31,7 +31,7 @@
           </div>
           <div class="positions">
             <div class="positions__header">
-              <h3>Добавленные позиции</h3>
+              <h3 class="positions__header__text">Добавленные позиции</h3>
             </div>
             <div class="table-section__container">
               <div class="table">
@@ -262,8 +262,11 @@ export default {
   flex-direction: column
 .positions__header
   display: flex
+  margin: 5px
   flex-direction: column
   align-items: center
+.positions__header__text
+  font-weight: 700
 .table__header .table-cell-header
     background-color: #f2f2f2
     border: 1px solid black
@@ -370,6 +373,7 @@ export default {
   &:hover
     background-color: #f5f5f5
 .footer
+  gap: 5px
   margin-top: 20px
   display: flex
   justify-content: center

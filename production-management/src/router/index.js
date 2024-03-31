@@ -9,6 +9,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/',
+    name: 'main',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DetailsView.vue')
+  },
+  {
     path: '/details',
     name: 'details',
     // route level code-splitting
@@ -38,7 +43,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '@/views/SummaryInfoView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '@/views/CounterpartiesView.vue')
   },
   {
     path: '/logs',
@@ -71,29 +76,5 @@ router.beforeEach(async (to, from, next) => {
     next()
   }
 })
-
-// router.beforeEach((to, from, next) => {
-//   const token = sessionStorage.getItem('token')
-//   const userRole = sessionStorage.getItem('role')
-//   if (to.path !== '/home') {
-//     // Проверка наличия токена
-//     if (token) {
-//       if (to.path !== '/details') {
-//         next()
-//       } else {
-//         if (userRole === 1) {
-//           next()
-//         } else {
-//           next('/orders')
-//         }
-//       }
-//     } else {
-//       next('/home')
-//     }
-//   } else {
-//     // Если пользователь уже находится на странице входа, просто продолжаем
-//     next()
-//   }
-// })
 
 export default router

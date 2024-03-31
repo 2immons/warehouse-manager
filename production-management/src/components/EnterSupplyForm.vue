@@ -594,6 +594,7 @@ export default {
   cursor: text
 .footer
   margin-top: 20px
+  gap: 5px
   display: flex
   justify-content: center
 </style>

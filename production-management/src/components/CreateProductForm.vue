@@ -16,6 +16,7 @@
           </form>
           <div class="footer">
             <button class="buttons__btn" @click="createProduct">Создать образец<br>продукта</button>
+            <button class="buttons__btn" @click="closePopup">Закрыть</button>
           </div>
           <!-- переписать в нормальный вид -->
         </div>
@@ -108,7 +109,17 @@ export default {
   gap: 10px
   align-items: center
   margin: 20px 0px 20px 0px
+  input[type=text]
+    height: 30px
+    display: flex
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
 .footer
   display: flex
+  margin-top: 20px
+  gap: 5px
   justify-content: center
 </style>

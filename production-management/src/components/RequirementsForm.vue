@@ -13,7 +13,7 @@
             <div class="positions">
               <div class="positions__content">
                 <textarea v-model="this.requirements" type="text"></textarea>
-                <p>Текущие потребности:</p>
+                <p class="positions__content__header">Текущие потребности:</p>
                 <p>{{ this.currentOrder.requirements }}</p>
               </div>
             </div>
@@ -110,6 +110,7 @@ export default {
   text-align: center
   z-index: 3
 .content
+  margin-top: 20px
   display: flex
   flex-direction: column
   width: 95%
@@ -118,6 +119,7 @@ export default {
   flex-direction: column
   align-items: flex-start
 .positions
+  margin-top: 5px
   display: flex
   flex-direction: column
 .positions__header
@@ -125,10 +127,15 @@ export default {
   flex-direction: column
   align-items: center
 .positions__content
+  gap: 5px
   display: flex
   flex-direction: column
   align-items: flex-start
+.positions__content__header
+  font-weight: 700
 .footer
   display: flex
-  justify-content: left
+  margin-top: 20px
+  gap: 5px
+  justify-content: center
 </style>

@@ -8,19 +8,21 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              <label for="">Заказ №: {{ this.currentOrder.id }}</label>
-              <label for="">Документ №: {{ this.currentOrder.doc_number }}</label>
-              <label for="">Клиент: {{ this.currentOrder.client_name }}</label>
-              <label for="">Адрес клиента: {{ this.currentOrder.client_adress }}</label>
-              <label for="">ИНН клиента: {{ this.currentOrder.client_inn }}</label>
-              <label for="">КПП клиента: {{ this.currentOrder.client_kpp }}</label>
-              <label for="">Дата создания заказа: {{ this.currentOrder.creation_date }}</label>
-              <label for="">Исполнить до: {{ this.currentOrder.deadline }}</label>
-              <input type="date" v-model="this.date">
+              <p for="">Заказ №: {{ this.currentOrder.id }}</p>
+              <p for="">Документ №: {{ this.currentOrder.doc_number }}</p>
+              <p for="">Клиент: {{ this.currentOrder.client_name }}</p>
+              <p for="">Адрес клиента: {{ this.currentOrder.client_adress }}</p>
+              <p for="">ИНН клиента: {{ this.currentOrder.client_inn }}</p>
+              <p for="">КПП клиента: {{ this.currentOrder.client_kpp }}</p>
+              <p for="">Дата создания заказа: {{ this.currentOrder.creation_date }}</p>
+              <p for="">Исполнить до: {{ this.currentOrder.deadline }}</p>
+              <br>
+              <label for="">Дата отгрузки</label>
+              <input v-model="this.deadline" type="date">
             </div>
             <div class="positions">
               <div class="positions__header">
-                <h3>Позиции</h3>
+                <h3 class="positions__header__text">Позиции</h3>
               </div>
               <div class="table-section__container">
                 <div class="table">
@@ -39,7 +41,7 @@
                       {{ item.quantity }}
                     </div>
                     <div class="table-cell">
-                      {{ item.is_ready_to_ship }}
+                      {{ item.is_ready_to_ship ? "Готово" : "Не готово" }}
                     </div>
                   </div>
                 </div>
@@ -234,6 +236,9 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
+  margin: 5px
+.positions__header__text
+  font-weight: 700
 .positions__content
   display: flex
   flex-direction: column
@@ -323,5 +328,7 @@ export default {
 
 .footer
   display: flex
-  justify-content: left
+  margin-top: 20px
+  gap: 5px
+  justify-content: center
 </style>

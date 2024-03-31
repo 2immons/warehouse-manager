@@ -18,8 +18,8 @@
               </div>
             </div>
             <div class="footer">
-              Футер (кнопки)
-              <button @click="closePopup">Close Popup</button>
+              <button @click="closePopup" class="buttons__btn">Подтвердить</button>
+              <button @click="closePopup" class="buttons__btn">Закрыть</button>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default {
   position: absolute
   max-width: 1300px
   width: 67%
-  height: 750px
+  height: fit-content
   background: #fff
   padding: 20px
   border-radius: 8px
@@ -95,5 +95,7 @@ export default {
   align-items: flex-start
 .footer
   display: flex
-  justify-content: left
+  margin-top: 20px
+  gap: 5px
+  justify-content: center
 </style>

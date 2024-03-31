@@ -550,5 +550,6 @@ export default {
 .footer
   margin-top: 20px
   display: flex
+  gap: 5px
   justify-content: center
 </style>

@@ -110,16 +110,25 @@ export default {
   text-align: center
   z-index: 3
 .content
+  margin-top: 20px
   display: flex
   flex-direction: column
   width: 95%
 .content__inputs
   display: flex
   flex-direction: column
-  gap: 10px
-  align-items: center
-  margin: 20px 0px 20px 0px
+  gap: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
 .footer
   display: flex
+  margin-top: 20px
+  gap: 5px
   justify-content: center
 </style>

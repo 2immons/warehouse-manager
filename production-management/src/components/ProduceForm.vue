@@ -133,6 +133,8 @@ export default {
   flex-direction: column
   align-items: flex-start
 .footer
+  margin-top: 20px
+  gap: 5px
   display: flex
-  justify-content: left
+  justify-content: center
 </style>

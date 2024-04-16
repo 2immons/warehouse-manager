@@ -93,6 +93,7 @@ export default {
     logout () {
       this.$router.push('/home')
       Cookies.remove('token')
+      Cookies.remove('token_expiration')
       Cookies.remove('userId')
       sessionStorage.removeItem('userId')
       sessionStorage.removeItem('username')

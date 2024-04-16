@@ -28,8 +28,10 @@ export default {
           return false
         }
 
-        Cookies.set('token', response.data.token)
-        console.log('Успешная аутентификация', Cookies.get('token'), response.data.user)
+        Cookies.set('token', response.data.token.tokenValue)
+        Cookies.set('token_expiration', response.data.token.expirationTime)
+        console.log(response.data)
+        console.log('Успешная аутентификация', Cookies.get('token'), Cookies.get('token_expiration'), response.data.user)
         sessionStorage.setItem('username', response.data.user.name)
         Cookies.set('userId', response.data.user.id)
         sessionStorage.setItem('userId', response.data.user.id)

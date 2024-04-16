@@ -1,4 +1,4 @@
-<template class="dd">
+<template>
   <router-view/>
 </template>
 

@@ -9,49 +9,29 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/',
-    name: 'main',
-    component: () => import(/* webpackChunkName: "about" */ '../views/DetailsView.vue')
-  },
-  {
     path: '/details',
     name: 'details',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/DetailsView.vue')
+    component: () => import('@/views/DetailsView.vue')
   },
   {
     path: '/products',
     name: 'products',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ProductsView.vue')
+    component: () => import('@/views/ProductsView.vue')
   },
   {
     path: '/orders',
     name: 'orders',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/OrdersView.vue')
+    component: () => import('@/views/OrdersView.vue')
   },
   {
     path: '/counterparties',
     name: 'counterparties',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '@/views/CounterpartiesView.vue')
+    component: () => import('@/views/CounterpartiesView.vue')
   },
   {
     path: '/logs',
     name: 'logs',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/LogsView.vue')
+    component: () => import('@/views/LogsView.vue')
   }
 ]
 
@@ -61,18 +41,17 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const token = await Cookies.get('token')
-
   if (to.path !== '/home') {
-    // Проверка наличия токена
-    if (token) {
+    const token = await Cookies.get('token')
+    const tokenExpiration = await Cookies.get('token_expiration')
+    if (token && tokenExpiration && new Date(tokenExpiration) > new Date()) {
       next()
     } else {
-      // Если токена нет, перенаправляем на страницу входа
+      Cookies.remove('token')
+      Cookies.remove('token_expiration')
       next('/home')
     }
   } else {
-    // Если пользователь уже находится на странице входа, просто продолжаем
     next()
   }
 })

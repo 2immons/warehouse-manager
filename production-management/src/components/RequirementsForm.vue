@@ -11,8 +11,10 @@
               Ввести или обновить потребности производства
             </div>
             <div class="positions">
+              <div class="positions__text">
+                <textarea v-model="this.requirements" class="text" type="text" name="" id="" cols="30" rows="10" placeholder="Введите запрос..."></textarea>
+              </div>
               <div class="positions__content">
-                <textarea v-model="this.requirements" type="text"></textarea>
                 <p class="positions__content__header">Текущие потребности:</p>
                 <p>{{ this.currentOrder.requirements }}</p>
               </div>
@@ -133,6 +135,12 @@ export default {
   align-items: flex-start
 .positions__content__header
   font-weight: 700
+.positions__text
+  display: flex
+  justify-content: center
+  margin: 15px 0px 15px 0px
+.text
+  width: 100%
 .footer
   display: flex
   margin-top: 20px

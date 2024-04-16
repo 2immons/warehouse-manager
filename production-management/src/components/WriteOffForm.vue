@@ -8,19 +8,28 @@
         </div>
         <div class="content">
           <div class="intro-info">
-            <label for="">№ акта списания</label>
-            <input v-model="this.documentNumber" type="text">
-            <div class="input-wrapper">
-              <label for="">Сдал (ФИО, должность)</label>
-              <input type="text">
+            <div class="input-line">
+              <div class="input-wrapper">
+                <label for="">№ акта списания</label>
+                <input v-model="this.documentNumber" type="text">
+              </div>
+              <div class="input-wrapper">
+                <label for="">Сдал (ФИО, должность)</label>
+                <input type="text">
+              </div>
+              <div class="input-wrapper">
+                <label for="">Принял (ФИО, должность)</label>
+                <input type="text">
+              </div>
             </div>
-            <div class="input-wrapper">
-              <label for="">Принял (ФИО, должность)</label>
-              <input type="text">
-            </div>
-            <div class="input-wrapper">
-              <label for="">Дата</label>
-              <input class="input-short" v-model="this.date" type="date">
+            <div class="input-line">
+              <div class="input-wrapper">
+                <label for="">Дата</label>
+                <input class="input-short" v-model="this.date" type="date" required>
+              </div>
+              <div class="input-wrapper">
+                <input type="file" @change="handleFileUpload" />
+              </div>
             </div>
             <button class="buttons__btn" @click="openProductsListPopup">Добавить позицию по привязке к продукту</button>
             <button class="buttons__btn" @click="addPositionRow">Добавить позицию вручную</button>
@@ -445,6 +454,23 @@ export default {
     border-radius: 4px
     padding: 0 10px
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+.input-line
+  display: flex
+  flex-direction: row
+  gap: 10px
+  width: 100%
+  align-items: center
+.input-wrapper
+  display: flex
+  flex-direction: column
+  text-align: left
+  width: 100%
+.input-wrapper--row
+  flex-direction: row
+  label
+    width: 200px
+.input-short
+  width: 150px
 .positions
   display: flex
   flex-direction: column

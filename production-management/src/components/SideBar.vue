@@ -56,20 +56,16 @@ export default {
     }
   },
   created () {
-    // ... Ваши существующие хуки
     setInterval(() => {
       this.currentTime = this.getCurrentTime()
-    }, 1000) // Обновляем каждую секунду
+    }, 1000)
   },
   mounted () {
-    // Вызываем метод handleResize при монтировании компонента для установки начального значения
     this.username = sessionStorage.getItem('username')
     this.handleResize()
-    // Добавляем обработчик изменения размера окна
     window.addEventListener('resize', this.handleResize)
   },
   beforeUnmount () {
-    // Удаляем обработчик при уничтожении компонента
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
@@ -101,11 +97,8 @@ export default {
       sessionStorage.removeItem('role')
     },
     handleResize () {
-      // Получаем текущую ширину окна
       const windowWidth = window.innerWidth
-
-      // Используем медиа-запрос, чтобы определить, когда показывать компонент
-      this.isSidebarButtonVisible = windowWidth < 1780 // Например, компонент виден при ширине экрана больше 768px
+      this.isSidebarButtonVisible = windowWidth < 1780
     }
   }
 }

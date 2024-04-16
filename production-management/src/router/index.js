@@ -41,11 +41,16 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const token = await Cookies.get('token')
+  const tokenExpiration = await Cookies.get('token_expiration')
+
   if (to.path !== '/home') {
-    const token = await Cookies.get('token')
-    const tokenExpiration = await Cookies.get('token_expiration')
     if (token && tokenExpiration && new Date(tokenExpiration) > new Date()) {
-      next()
+      if (to.path === '/') {
+        next('/details')
+      } else {
+        next()
+      }
     } else {
       Cookies.remove('token')
       Cookies.remove('token_expiration')

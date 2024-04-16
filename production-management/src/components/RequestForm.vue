@@ -7,14 +7,56 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              Общая информация {{ organisation.name }}
+              <div class="input-line">
+                <label for="">Поле</label>
+                <input class="input-short" v-model="this.UPD_SF_Number" type="text">
+                <label for="">от</label>
+                <input type="date" v-model="this.UPD_SF_date" required>
+              </div>
+              <div class="input-wrapper">
+                <label for="">Поле</label>
+                <input class="input-short" v-model="this.status" type="text">
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierName" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierAdress" type="text">
+                </div>
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierINN" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierKPP" type="text">
+                </div>
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input class="input-short" v-model="this.client" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Дата</label>
+                  <input class="input-short" v-model="this.date" type="date" required>
+                </div>
+                <div class="input-wrapper">
+                  <input type="file" @change="handleFileUpload" />
+                </div>
+              </div>
             </div>
             <div class="positions">
               <div class="positions__header">
-                <h3>Заголовок</h3>
+                <h3 class="positions__header__text">Позиции</h3>
               </div>
-              <div class="positions__content">
-                Позиции
+              <div class="positions__text">
+                <textarea class="text" name="" id="" cols="30" rows="10" placeholder="Введите запрос..."></textarea>
               </div>
             </div>
             <div class="footer">
@@ -66,7 +108,7 @@ export default {
   align-items: center
   position: absolute
   max-width: 1300px
-  width: 67%
+  width: 80%
   height: fit-content
   background: #fff
   padding: 20px
@@ -82,6 +124,34 @@ export default {
   display: flex
   flex-direction: column
   align-items: flex-start
+  margin: 20px 0px 20px 0px
+  gap: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    align-items: center
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+.input-line
+  display: flex
+  flex-direction: row
+  gap: 10px
+  width: 100%
+  align-items: center
+.input-wrapper
+  display: flex
+  flex-direction: column
+  text-align: left
+  width: 100%
+.input-wrapper--row
+  flex-direction: row
+  label
+    width: 200px
+.input-short
+  width: 150px
 .positions
   display: flex
   flex-direction: column
@@ -89,10 +159,14 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
-.positions__content
+  margin: 5px
+.positions__header__text
+  font-weight: 700
+.positions__text
   display: flex
-  flex-direction: column
-  align-items: flex-start
+  justify-content: center
+.text
+  width: 100%
 .footer
   display: flex
   margin-top: 20px

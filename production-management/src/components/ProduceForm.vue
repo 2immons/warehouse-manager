@@ -8,15 +8,54 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              {{ this.currentProduct.id }}
-            </div>
-            <div class="positions">
-              <div class="positions__header">
-                <h3>Заголовок</h3>
+              <div class="input-line">
+                <label for="">Поле</label>
+                <input class="input-short" v-model="this.UPD_SF_Number" type="text">
+                <label for="">от</label>
+                <input type="date" v-model="this.UPD_SF_date" required>
               </div>
-              <div class="positions__content">
-                <input type="text" v-model="this.producedQuantity">
-                <input type="date" v-model="this.date">
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Продукт</label>
+                  <input v-model="this.productName" type="text" >
+                </div>
+                <div class="input-wrapper">
+                  <label for="">В количестве</label>
+                  <input v-model="this.producedQuantity" type="text" >
+                </div>
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierName" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierAdress" type="text">
+                </div>
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierINN" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input v-model="this.supplierKPP" type="text">
+                </div>
+              </div>
+              <div class="input-line">
+                <div class="input-wrapper">
+                  <label for="">Поле</label>
+                  <input class="input-short" v-model="this.client" type="text">
+                </div>
+                <div class="input-wrapper">
+                  <label for="">Дата</label>
+                  <input class="input-short" v-model="this.date" type="date" required>
+                </div>
+                <div class="input-wrapper">
+                  <input type="file" @change="handleFileUpload" />
+                </div>
               </div>
             </div>
             <div class="footer">
@@ -36,7 +75,8 @@ export default {
     return {
       isSubmitFormVisible: false,
       producedQuantity: 0,
-      date: ''
+      date: '',
+      productName: this.currentProduct.name
     }
   },
   props: {
@@ -105,7 +145,7 @@ export default {
   align-items: center
   position: absolute
   max-width: 1300px
-  width: 67%
+  width: 80%
   height: fit-content
   background: #fff
   padding: 20px
@@ -121,6 +161,34 @@ export default {
   display: flex
   flex-direction: column
   align-items: flex-start
+  margin: 20px 0px 20px 0px
+  gap: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    align-items: center
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+.input-line
+  display: flex
+  flex-direction: row
+  gap: 10px
+  width: 100%
+  align-items: center
+.input-wrapper
+  display: flex
+  flex-direction: column
+  text-align: left
+  width: 100%
+.input-wrapper--row
+  flex-direction: row
+  label
+    width: 200px
+.input-short
+  width: 150px
 .positions
   display: flex
   flex-direction: column

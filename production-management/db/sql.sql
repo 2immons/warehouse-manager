@@ -19,11 +19,13 @@ const pool = new Pool({
 })
 */
 
-
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR
 );
+
+INSERT INTO roles(name) VALUES ('Администратор');
+INSERT INTO roles(name) VALUES ('Отдел производства')
 
 
 CREATE TABLE agents (

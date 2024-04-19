@@ -124,7 +124,7 @@
                     <div class="compability-popup-overlay" v-if="isCompabilityPopupVisible" @click="closeCompatibilityPopup">
                       <div class="compability-popup" @click.stop>
                         <div class="header">
-                          <h1 class="header__text">НАСТРОЙКА СОВМЕСТИМОСТИ</h1>
+                          <h1 class="popup-header__text">НАСТРОЙКА СОВМЕСТИМОСТИ</h1>
                           <hr class="div-line">
                         </div>
                         <input class="compability-popup__input" type="text" @input="handleSearch" v-model="searchText" placeholder="Начните вводить наименование и/или выберите из списка...">
@@ -205,7 +205,6 @@ export default {
       this.closeCompatibilityPopup()
     },
     handleSearch () {
-      console.log(this.filteredItems)
       const searchText = this.searchText.toLowerCase()
       if (searchText === '') {
         this.filteredItems = this.getProducts
@@ -430,11 +429,15 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
   text-align: center
   z-index: 3
+.popup-header__text
+  font-size: 15px
 .compability-popup__input
   width: 300px
   margin: 20px 0px 0px 0px
 .products-list
-  padding: 5px 0px 5px 0px
+  display: flex
+  flex-direction: column
+  gap: 5px
   margin: 20px
   list-style-type: none
   background-color: #fff
@@ -447,10 +450,11 @@ export default {
 .products-list__item
   display: flex
   justify-content: space-between
-  margin-bottom: 5px
   text-align: left
   font-size: 16px
-  height: 15px
+  height: fit-content
+  padding: 7px 5px 7px 5px
+  border: 1px solid #ddd
   cursor: pointer
   &:hover
     background-color: #f5f5f5

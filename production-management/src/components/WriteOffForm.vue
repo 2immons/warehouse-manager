@@ -77,8 +77,10 @@
                     </div>
                   </div>
                 </div>
-                <button v-if="!this.isFirstStep" @click="goToProducts">Назад</button>
-                <button v-if="!this.isFirstStep" @click="addDetailsToPositions">Подтвердить</button>
+                <div class="detail-selection-buttons">
+                  <button class="buttons__btn" v-if="!this.isFirstStep" @click="goToProducts">Назад</button>
+                  <button class="buttons__btn" v-if="!this.isFirstStep" @click="addDetailsToPositions">Подтвердить</button>
+                </div>
               </div>
             </div>
           </div>
@@ -389,7 +391,7 @@ export default {
   justify-content: center
   position: absolute
   max-width: 1300px
-  width: 70%
+  width: fit-content
   height: fit-content
   background: #fff
   padding: 20px
@@ -401,12 +403,14 @@ export default {
   width: 300px
   margin: 20px 0px 0px 0px
 .products-list2
-  padding: 5px 0px 5px 0px
+  display: flex
+  flex-direction: column
   margin: 20px
   list-style-type: none
   background-color: #fff
   border: 1px solid #ddd
   height: 70%
+  gap: 5px
   max-height: 600px
   width: 300px
   z-index: 552
@@ -414,11 +418,13 @@ export default {
 .products-list2__item
   display: flex
   justify-content: space-between
-  margin-bottom: 5px
   text-align: left
   font-size: 16px
-  height: 15px
+  height: fit-content
   cursor: pointer
+  background-color: white
+  padding: 7px 5px 7px 5px
+  border: 1px solid #ddd
   &:hover
     background-color: #f5f5f5
 .popup-overlay
@@ -481,6 +487,11 @@ export default {
     width: 200px
 .input-short
   width: 150px
+.detail-selection-buttons
+  display: flex
+  gap: 5px
+  width: 90%
+  margin-top: 10px
 .positions
   display: flex
   flex-direction: column
@@ -512,9 +523,9 @@ export default {
   grid-template-columns: 5% 10% 5% 10% 10% 6% 8% 6% 8% 8% 8% 8% 8%
 .table2
   display: grid
-  width: 100%
+  width: 90%
   justify-content: center
-  grid-template-columns: 5% 10% 10% 6% 8% 6% 8% 8% 8% 8% 8%
+  grid-template-columns: 5% 15% 8% 8% 10% 8% 10% 13% 10% 10% 9%
 .table__header
   font-weight: 700
   display: contents
@@ -567,6 +578,10 @@ export default {
   width: 100%
   z-index: 55
 .products-list
+  display: flex
+  width: 200%
+  flex-direction: column
+  gap: 2px
   padding: 5px 0px 5px 0px
   list-style-type: none
   margin: 0

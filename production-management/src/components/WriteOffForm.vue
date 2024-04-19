@@ -124,12 +124,12 @@
                   <div class="table-cell">
                     <input class="table-cell-input" type="text" v-model="item.needs">
                   </div>
-                  <div class="table-cell">{{ (item.supplied !== '') ? '' : item.supplied - item.written_off  }}</div>
+                  <div class="table-cell">{{ (item.supplied !== undefined) ? item.supplied - item.written_off: '0'  }}</div>
                   <div class="table-cell">{{ (item.price !== '') ? item.price + ' руб': '' }}</div>
                   <div class="table-cell">
                     <input class="table-cell-input" type="number" v-model="item.quantity">
                   </div>
-                  <div class="table-cell">{{ (item.price !== '' && item.quantity !== '') ? (item.price * item.quantity).toFixed(2) + ' руб': '' }}</div>
+                  <div class="table-cell">{{ (item.price !== undefined && item.quantity !== undefined) ? (item.price * item.quantity).toFixed(2) + ' руб': '' }}</div>
                   <div class="table-cell">{{ (item.supply_date !== '') ? this.formatDateTime(item.supply_date) : ''}}</div>
                   <div class="table-cell">{{ (item.upd_sf_number !== '') ? '№ ' + item.upd_sf_number : '' }}</div>
                   <div class="table-cell">{{ item.supplier_name }}</div>
@@ -202,7 +202,6 @@ export default {
             .map(item => item.product_id)
         })
       })
-      console.log(this.details)
       this.details = this.details.filter(detail => {
         return detail.compatibleWith && detail.compatibleWith.some(id => id === item.id)
       })
@@ -228,9 +227,14 @@ export default {
     addDetailsToPositions () {
       const checkedDetails = this.details.filter(detail => detail.isChecked === true)
       checkedDetails.forEach(detail => {
-        detail.needs = 'Производство ' + this.currentProduct.name
+        if (this.currentProduct !== undefined && this.currentProduct !== null) {
+          detail.needs = 'Производство ' + this.currentProduct.name
+        } else {
+          detail.needs = 'Производство'
+        }
         detail.operationType = 'Списание на производство'
         this.positions.push(detail)
+        this.positions[this.positions.length - 1].balance = detail.supplied - detail.written_off
         detail.isChecked = false
       })
       this.closeProductsListPopup()
@@ -239,6 +243,7 @@ export default {
       this.isProductsListPopupVisible = true
     },
     closeProductsListPopup () {
+      this.currentProduct = null
       this.isProductsListPopupVisible = false
       this.isFirstStep = true
       this.details = this.getDetails
@@ -256,9 +261,15 @@ export default {
     },
     selectDetail (index, detail) {
       this.positions[index].name = detail.name
-      this.positions[index].detail_id = detail.id
+      this.positions[index].id = detail.id
       this.positions[index].unit = detail.unit
-      this.positions[index].needs = 'Производство ' + this.currentProduct.name
+      if (this.currentProduct !== undefined && this.currentProduct !== null) {
+        this.positions[index].needs = 'Производство ' + this.currentProduct.name
+      } else {
+        this.positions[index].needs = 'Производство'
+      }
+      this.positions[index].supplied = detail.supplied
+      this.positions[index].written_off = detail.written_off
       this.positions[index].operationType = 'Списание на производство'
       this.positions[index].price = detail.price
       this.positions[index].supplier_name = detail.supplier_name
@@ -283,7 +294,6 @@ export default {
       this.selectedProduct = null
     },
     handleSearch () {
-      console.log(this.products)
       const searchText = this.searchText.toLowerCase()
       if (searchText === '') {
         this.products = this.getProducts
@@ -325,7 +335,7 @@ export default {
     async confirmActions () {
       try {
         const detailsDates = []
-        const updatedDetails = [...this.details]
+        const updatedDetails = [...this.positions]
         updatedDetails.forEach(detail => {
           if ('quantity' in detail) {
             detail.written_off = detail.written_off + detail.quantity

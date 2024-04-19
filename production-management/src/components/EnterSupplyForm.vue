@@ -539,7 +539,7 @@ export default {
   align-items: flex-start
   align-content: center
   width: 99%
-  height: 330px
+  height: 230px
   overflow-y: auto
 
 .table

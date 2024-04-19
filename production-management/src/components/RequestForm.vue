@@ -62,6 +62,7 @@
             <div class="footer">
               <button @click="closePopup" class="buttons__btn">Подтвердить</button>
               <button @click="closePopup" class="buttons__btn">Закрыть</button>
+              <button class="buttons__btn" @click="generateDocument">Сгенерировать документ</button>
             </div>
           </div>
         </div>

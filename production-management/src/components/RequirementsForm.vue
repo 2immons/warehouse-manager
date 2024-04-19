@@ -8,15 +8,11 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              Ввести или обновить потребности производства
+              {{ this.requirements === null || this.requirements === "" ? "Ввести потребности производства:" : "Обновить потребности производства:" }}
             </div>
             <div class="positions">
               <div class="positions__text">
                 <textarea v-model="this.requirements" class="text" type="text" name="" id="" cols="30" rows="10" placeholder="Введите запрос..."></textarea>
-              </div>
-              <div class="positions__content">
-                <p class="positions__content__header">Текущие потребности:</p>
-                <p>{{ this.currentOrder.requirements }}</p>
               </div>
             </div>
             <div class="footer">
@@ -35,7 +31,7 @@ export default {
   data () {
     return {
       isSubmitFormVisible: false,
-      requirements: ''
+      requirements: this.currentOrder.requirements
     }
   },
   props: {
@@ -128,13 +124,6 @@ export default {
   display: flex
   flex-direction: column
   align-items: center
-.positions__content
-  gap: 5px
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-.positions__content__header
-  font-weight: 700
 .positions__text
   display: flex
   justify-content: center

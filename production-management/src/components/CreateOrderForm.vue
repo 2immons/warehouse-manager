@@ -282,7 +282,7 @@ export default {
 
 .table
   display: grid
-  width: 80%
+  width: 100%
   justify-content: center
   grid-template-columns: 10% 50% 20% 20%
 .table__header

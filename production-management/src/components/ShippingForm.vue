@@ -8,17 +8,47 @@
           </div>
           <div class="content">
             <div class="intro-info">
-              <p for="">Заказ №: {{ this.currentOrder.id }}</p>
-              <p for="">Документ №: {{ this.currentOrder.doc_number }}</p>
-              <p for="">Клиент: {{ this.currentOrder.client_name }}</p>
-              <p for="">Адрес клиента: {{ this.currentOrder.client_adress }}</p>
-              <p for="">ИНН клиента: {{ this.currentOrder.client_inn }}</p>
-              <p for="">КПП клиента: {{ this.currentOrder.client_kpp }}</p>
-              <p for="">Дата создания заказа: {{ this.currentOrder.creation_date }}</p>
-              <p for="">Исполнить до: {{ this.currentOrder.deadline }}</p>
-              <br>
-              <label for="">Дата отгрузки</label>
-              <input v-model="this.deadline" type="date">
+              <div class="field-line">
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Заказ №: </p> <p>{{ this.currentOrder.id }}</p>
+                </div>
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Документ №: </p> <p>{{ this.currentOrder.doc_number }}</p>
+                </div>
+              </div>
+              <div class="field-line">
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Клиент: </p> <p>{{ this.currentOrder.client_name }}</p>
+                </div>
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Адрес клиента: </p> <p>{{ this.currentOrder.client_adress }}</p>
+                </div>
+              </div>
+              <div class="field-line">
+                <div class="field-wrapper">
+                  <p class="field-title" for="">ИНН клиента: </p> <p>{{ this.currentOrder.client_inn }}</p>
+                </div>
+                <div class="field-wrapper">
+                  <p class="field-title" for="">КПП клиента: </p> <p>{{ this.currentOrder.client_kpp }}</p>
+                </div>
+              </div>
+              <div class="field-line">
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Дата создания заказа: </p> <p>{{ this.formatDateTime(String(this.currentOrder.creation_date)) }}</p>
+                </div>
+                <div class="field-wrapper">
+                  <p class="field-title" for="">Исполнить до: </p> <p>{{ this.formatDateTime(String(this.currentOrder.deadline)) }}</p>
+                </div>
+              </div>
+              <div class="field-line">
+                <div class="field-wrapper">
+                  <label for="">Дата отгрузки</label>
+                  <input class="input-short" v-model="this.deadline" type="date">
+                </div>
+                <div class="field-wrapper">
+                  <input type="file" @change="handleFileUpload" />
+                </div>
+              </div>
             </div>
             <div class="positions">
               <div class="positions__header">
@@ -50,7 +80,6 @@
             <div class="footer">
               <button class="buttons__btn" @click="shipProduct">Отгрузить</button>
               <button class="buttons__btn" @click="closePopup">Закрыть</button>
-              <input type="file" ref='fileInput' />
               <button class="buttons__btn" @click="generateDocument">Сгенерировать документ</button>
             </div>
           </div>
@@ -133,6 +162,15 @@ export default {
         this.products = this.getProducts
       })
     },
+    formatDateTime (dateTimeString) {
+      const originalDate = new Date(dateTimeString)
+      const day = originalDate.getDate().toString().padStart(2, '0')
+      const month = (originalDate.getMonth() + 1).toString().padStart(2, '0')
+      const year = originalDate.getFullYear().toString().padStart(2, '0')
+
+      const formattedDate = `${day}.${month}.${year}`
+      return formattedDate
+    },
     closePopup () {
       this.$emit('close-popup')
     },
@@ -214,7 +252,7 @@ export default {
   position: absolute
   max-width: 1300px
   width: 67%
-  height: 750px
+  height: fit-content
   background: #fff
   padding: 20px
   border-radius: 8px
@@ -229,6 +267,35 @@ export default {
   display: flex
   flex-direction: column
   align-items: flex-start
+  gap: 10px
+  margin-top: 10px
+  margin-right: 1%
+  border: 1px solid black
+  padding: 5px
+  input[type=text]
+    height: 30px
+    display: flex
+    align-items: center
+    background-color: #fff
+    border: 1px solid #ccc
+    border-radius: 4px
+    padding: 0 10px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+.field-line
+  display: flex
+  flex-direction: row
+  gap: 10px
+  width: 100%
+  align-items: center
+.field-wrapper
+  display: flex
+  text-align: left
+  width: 100%
+  gap: 5px
+.field-title
+  font-weight: bold
+.input-short
+  width: 150px
 .positions
   display: flex
   flex-direction: column

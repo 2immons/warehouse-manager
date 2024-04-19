@@ -382,7 +382,7 @@ export default {
 
         await this.$store.dispatch('createLog', {
           user_id: Number(sessionStorage.getItem('userId')),
-          operation: 'внесена поставка ' + this.positions.length + ' позиций, номер УПД-СФ: ' + this.UPD_SF_number,
+          operation: 'внесена поставка ' + this.positions.length + ' позиций, номер УПД-СФ: ' + this.UPD_SF_Number,
           date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
         })
 

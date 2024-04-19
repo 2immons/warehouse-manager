@@ -149,10 +149,8 @@ export default {
 
         if (field) {
           if (typeof a[field] === 'string') {
-            // Use localeCompare for string comparison
             return orderFactor * a[field].localeCompare(b[field])
           } else {
-            // Use numeric comparison for other types
             return orderFactor * (a[field] - b[field])
           }
         } else {

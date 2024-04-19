@@ -30,9 +30,6 @@ export default {
       try {
         const responseProducts = await axios.put('http://localhost:4444/api/update-details', updatedDetails, { withCredentials: true })
         console.log('Подтверждено готовность', responseProducts.data.success)
-
-        // const responseLogs = await axios.post('http://localhost:4444/api/create-logs', state.logs)
-        // console.log('Создан лог', responseLogs.data.success)
         commit('updateDetails', updatedDetails)
       } catch (error) {
         console.error('Ошибка при отправке данных на сервер:', error)

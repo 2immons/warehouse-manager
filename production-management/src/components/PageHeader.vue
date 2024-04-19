@@ -96,17 +96,6 @@ export default {
       } catch (error) {
         console.error('Ошибка при обновлении заказа:', error)
       }
-      // try {
-      //   const updatedLogs = [...this.notifications]
-      //   this.notifications.forEach(notification => {
-      //     notification.is_read = true
-      //   })
-      //   const response = await axios.put('http://localhost:4444/api/update-logs', updatedLogs)
-      //   this.notifications = response.data.logs
-      //   this.fetchLogsFromServer()
-      // } catch (error) {
-      //   console.error('Error fetching products:', error)
-      // }
     },
 
     toggleNotifications () {

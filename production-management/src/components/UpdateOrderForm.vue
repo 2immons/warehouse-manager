@@ -148,7 +148,7 @@ export default {
     showCounterpartiesList () {
       this.isClientInputActive = true
     },
-    hideCounterpartiesList () { // переделать
+    hideCounterpartiesList () {
       setTimeout(() => {
         this.isClientInputActive = false
       }, 200)

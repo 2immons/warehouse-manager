@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-// В файле user.js
 export default {
   state: {
     orders: []

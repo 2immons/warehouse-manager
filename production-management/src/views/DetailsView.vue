@@ -324,7 +324,7 @@ export default {
       let dateItems = []
 
       await this.fetchWriteOffs().then(() => {
-        dateItems = this.getWriteOffs // detail_id, write_off_date, quantity
+        dateItems = this.getWriteOffs
       })
 
       if (searchDateStart === '' || searchDateEnd === '') {
@@ -378,7 +378,7 @@ export default {
     handleWindowResizeForSidebar: function () { this.isSideBarVisible = window.innerWidth > 1780 },
     openSideBar: function () { this.isSideBarVisible = true },
     closeSideBar: function () { this.isSideBarVisible = false },
-    toggleSearch () { // переделать пересмотреть
+    toggleSearch () {
       this.showDropDown = !this.showDropDown
       if (this.isSearchInputVisible) {
         this.isSearchInputDisabled = false
@@ -386,7 +386,7 @@ export default {
         this.isSearchInputVisible = true
       }
     },
-    toggleDateSearch () { // переделать пересмотреть
+    toggleDateSearch () {
       this.showDateDropDown = !this.showDateDropDown
       if (this.isSearchInputVisible) {
         this.isDateSearchInputDisabled = false

@@ -147,10 +147,8 @@ export default {
 
         if (field) {
           if (typeof a[field] === 'string') {
-            // Use localeCompare for string comparison
             return orderFactor * a[field].localeCompare(b[field])
           } else {
-            // Use numeric comparison for other types
             return orderFactor * (a[field] - b[field])
           }
         } else {
@@ -262,7 +260,7 @@ export default {
     handleWindowResizeForSidebar: function () { this.isSideBarVisible = window.innerWidth > 1780 },
     openSideBar: function () { this.isSideBarVisible = true },
     closeSideBar: function () { this.isSideBarVisible = false },
-    toggleSearch () { // переделать пересмотреть
+    toggleSearch () {
       this.showDropDown = !this.showDropDown
       if (this.isSearchInputVisible) {
         this.isSearchInputDisabled = false
@@ -270,7 +268,7 @@ export default {
         this.isSearchInputVisible = true
       }
     },
-    toggleDateSearch () { // переделать пересмотреть
+    toggleDateSearch () {
       this.showDateDropDown = !this.showDateDropDown
       if (this.isSearchInputVisible) {
         this.isDateSearchInputDisabled = false

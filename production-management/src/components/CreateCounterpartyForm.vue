@@ -24,7 +24,6 @@
             <button class="buttons__btn" @click="createCounterparty">Добавить контрагента</button>
             <button class="buttons__btn" @click="closePopup">Закрыть</button>
           </div>
-          <!-- переписать в нормальный вид -->
         </div>
       </div>
     </div>

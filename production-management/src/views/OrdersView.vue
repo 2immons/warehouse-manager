@@ -242,7 +242,6 @@ export default {
     window.addEventListener('resize', this.handleWindowResizeForSidebar)
   },
   beforeUnmount () {
-    // Удаляем обработчик при уничтожении компонента
     window.removeEventListener('resize', this.handleWindowResizeForSidebar)
   },
   methods: {
@@ -364,7 +363,7 @@ export default {
     handleWindowResizeForSidebar: function () { this.isSideBarVisible = window.innerWidth > 1780 },
     openSideBar: function () { this.isSideBarVisible = true },
     closeSideBar: function () { this.isSideBarVisible = false },
-    toggleSearch () { // переделать пересмотреть
+    toggleSearch () {
       this.showDropDown = !this.showDropDown
       if (this.isSearchInputVisible) {
         this.isSearchInputDisabled = false
@@ -372,7 +371,7 @@ export default {
         this.isSearchInputVisible = true
       }
     },
-    toggleDateSearch () { // переделать пересмотреть
+    toggleDateSearch () {
       this.showDateDropDown = !this.showDateDropDown
       if (this.isSearchInputVisible) {
         this.isDateSearchInputDisabled = false

@@ -240,7 +240,6 @@ export default {
       this.isCompabilityPopupVisible = true
     },
     handleFileUpload (event) {
-      // Сохраните файл в переменной для дальнейшей обработки
       const file = event.target.files[0]
       if (file) {
         const reader = new FileReader()
@@ -258,10 +257,6 @@ export default {
         .then((result) => {
           const text = result.value
           const lines = text.split('\n')
-
-          // for (let index = 360; index < 450; index++) {
-          //   console.log(lines[index])
-          // }
 
           this.UPD_SF_Number = lines[4]
           console.log(lines[8])

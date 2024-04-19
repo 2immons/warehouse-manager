@@ -10,7 +10,6 @@
               <button class="button button--deny" @click="denyAction">Нет, отменить</button>
               <button class="button button--confirm" @click="confirmAction">Да, подтвердить</button>
             </div>
-            <!-- переписать в нормальный вид -->
           </div>
         </div>
     </div>

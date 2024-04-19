@@ -1,6 +1,4 @@
 import { createStore } from 'vuex'
-// import axios from 'axios'
-
 import userModule from './user'
 import productModule from './product'
 import detailModule from './detail'

@@ -41,7 +41,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-// 5% 15% 7% 7% 9% 15% 5% 7% 10% 10% 10%
 .table__row
   display: flex
   border: 1px solid black

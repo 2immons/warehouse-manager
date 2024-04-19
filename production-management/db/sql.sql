@@ -1,3 +1,16 @@
+/*
+const pool = new Pool({
+    user: "postgres",
+    password: 'Originrega',
+    host: 'localhost',
+    port: 5432,
+    database: 'production-management-db',
+    encoding: 'UTF8'
+})
+*/
+
+CREATE DATABASE production-management-db
+
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR

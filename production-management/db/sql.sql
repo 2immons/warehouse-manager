@@ -8,12 +8,44 @@ const pool = new Pool({
     encoding: 'UTF8'
 })
 */
+/*
+const pool = new Pool({
+    user: "postgres",
+    password: 'Originrega',
+    host: 'localhost',
+    port: 5432,
+    database: 'production-management-db',
+    encoding: 'UTF8'
+})
+*/
 
-CREATE DATABASE production-management-db
 
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR
+);
+
+
+CREATE TABLE agents (
+    id SERIAL PRIMARY KEY,
+	name VARCHAR,
+	adress VARCHAR,
+	INN VARCHAR,
+	KPP VARCHAR
+);
+
+CREATE TABLE details (
+    id SERIAL PRIMARY KEY,
+	name VARCHAR,
+	unit VARCHAR,
+	supplied INTEGER,
+	written_off INTEGER DEFAULT 0,
+	balance INTEGER,
+	supply_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	UPD_SF_number VARCHAR,
+	supplier_name VARCHAR,
+	supplier_INN_KPP VARCHAR,
+	price DECIMAL
 );
 
 CREATE TABLE users (
@@ -46,20 +78,6 @@ CREATE TABLE compatibilities (
     product_id INTEGER REFERENCES products(id)
 );
 
-CREATE TABLE details (
-    id SERIAL PRIMARY KEY,
-	name VARCHAR,
-	unit VARCHAR,
-	supplied INTEGER,
-	written_off INTEGER DEFAULT 0,
-	balance INTEGER,
-	supply_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	UPD_SF_number VARCHAR,
-	supplier_name VARCHAR,
-	supplier_INN_KPP VARCHAR,
-	price DECIMAL
-);
-
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
 	client_id INTEGER REFERENCES agents(id),
@@ -76,14 +94,6 @@ CREATE TABLE orders_products (
 	product_id INTEGER REFERENCES products(id),
 	quantity INTEGER,
 	is_ready_to_ship BOOLEAN
-);
-
-CREATE TABLE agents (
-    id SERIAL PRIMARY KEY,
-	name VARCHAR,
-	adress VARCHAR,
-	INN VARCHAR,
-	KPP VARCHAR
 );
 
 CREATE TABLE products_productions (

@@ -26,6 +26,10 @@
                 <router-link class="router-link" to="/logs">История изменений</router-link>
             </div>
             <hr class="div-line">
+            <div :class="{ 'nav-item': true, 'active': $route.path === '/admin' }">
+                <router-link class="router-link" to="/admin">Администрирование</router-link>
+            </div>
+            <hr class="div-line">
         </nav>
         <div class="time-section">
             <p>Текущее время (GTM +4):</p>

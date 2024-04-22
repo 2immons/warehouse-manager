@@ -145,6 +145,7 @@
           <div class="footer">
             <button class="buttons__btn" @click="createOrder">Внести поставку</button>
             <button class="buttons__btn" @click="closePopup">Закрыть</button>
+            <button class="buttons__btn" @click="generateDocument">Сгенерировать документ</button>
           </div>
         </div>
       </div>

@@ -124,6 +124,9 @@ export default {
         case '/info':
           this.headerText = 'ЗАКАЗЫ'
           break
+        case '/admin':
+          this.headerText = 'АДМИНИСТРИРОВАНИЕ'
+          break
       }
     }
   }

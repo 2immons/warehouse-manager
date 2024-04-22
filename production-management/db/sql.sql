@@ -121,3 +121,9 @@ CREATE TABLE logs_users (
 	log_id INTEGER REFERENCES logs(id),
 	user_id INTEGER REFERENCES users(id)
 );
+
+CREATE TABLE documents (
+    id SERIAL PRIMARY KEY,
+    filename VARCHAR(255) NOT NULL,
+    file_data BYTEA NOT NULL
+);         

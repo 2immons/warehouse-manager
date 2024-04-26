@@ -9,6 +9,7 @@ import compabilityModule from './compability'
 import productionModule from './production'
 import shippingModule from './shipping'
 import writeOffModule from './writeOff'
+import documentModule from './documents'
 
 export default createStore({
   modules: {
@@ -21,7 +22,8 @@ export default createStore({
     compability: compabilityModule,
     production: productionModule,
     shipping: shippingModule,
-    writeOff: writeOffModule
+    writeOff: writeOffModule,
+    document: documentModule
   },
   state: {
     organisation: {

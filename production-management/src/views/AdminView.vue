@@ -62,7 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getCounterparties']),
+    ...mapGetters(['getCounterparties', 'getDocuments']),
     sortedItems () {
       return this.filteredItems.slice().sort((a, b) => {
         const field = this.sort.field
@@ -91,51 +91,7 @@ export default {
     window.removeEventListener('resize', this.handleWindowResizeForSidebar)
   },
   methods: {
-    ...mapActions(['fetchCounterparties']),
-    handleSearch () {
-      const searchText = this.searchText.toLowerCase()
-      if (searchText === '') {
-        this.filteredItems = this.getCounterparties
-        return
-      }
-      switch (this.searchColumn) {
-        case 'Номер №':
-          this.filteredItems = this.getCounterparties.filter(item => {
-            return (
-              item.id === parseFloat(searchText)
-            )
-          })
-          break
-        case 'Наименование':
-          this.filteredItems = this.getCounterparties.filter(item => {
-            return (
-              item.name.toLowerCase().includes(searchText)
-            )
-          })
-          break
-        case 'Адрес':
-          this.filteredItems = this.getCounterparties.filter(item => {
-            return (
-              item.adress.toLowerCase().includes(searchText)
-            )
-          })
-          break
-        case 'ИНН':
-          this.filteredItems = this.getCounterparties.filter(item => {
-            return (
-              item.inn.toLowerCase().includes(searchText)
-            )
-          })
-          break
-        case 'КПП':
-          this.filteredItems = this.getCounterparties.filter(item => {
-            return (
-              item.kpp.toLowerCase().includes(searchText)
-            )
-          })
-          break
-      }
-    },
+    ...mapActions(['fetchCounterparties', 'fetchDocuments']),
     async fetchCounterpartiesFromServer () {
       await this.fetchCounterparties().then(() => {
         this.filteredItems = this.getCounterparties

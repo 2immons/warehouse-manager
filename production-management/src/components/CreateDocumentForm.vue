@@ -112,7 +112,6 @@ export default {
   flex-direction: column
   align-items: center
   position: absolute
-  max-width: 500px
   min-width: 350px
   width: 40%
   height: fit-content
@@ -142,6 +141,10 @@ export default {
 .document-types
   display: flex
   flex-direction: column
+.type
+  display: flex
+  justify-content: left
+  text-align: left
 .footer
   display: flex
   margin-top: 20px

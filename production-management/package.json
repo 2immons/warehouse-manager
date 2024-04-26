@@ -15,6 +15,7 @@
     "docxtemplater": "^3.42.6",
     "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
+    "jszip-utils": "^0.1.0",
     "mammoth": "^1.6.0",
     "path-browserify": "^1.0.1",
     "pizzip": "^3.1.4",

@@ -7,36 +7,38 @@
             <hr class="div-line">
         </div>
         <div class="content">
-          <div class="content__file-view">
-            fff
-          </div>
-          <form class="content__inputs" @submit.prevent>
-            <label for="">Имя файла</label>
-            <input v-model="title" type="text">
-
-            <label for="">Описание файла</label>
-            <input v-model="description" type="text">
-
-            <label for="">Выбрать стандартность для:</label>
-
-            <div class="document-types">
-              <div class="type">
-                <input type="radio" id="option1" value="1" v-model="type">
-                <label for="option1">Акт о приозводстве</label>
-              </div>
-              <div class="type">
-                <input type="radio" id="option2" value="2" v-model="type">
-                <label for="option2">Списание на производство</label>
-              </div>
-              <div class="type">
-                <input type="radio" id="option3" value="3" v-model="type">
-                <label for="option3">Запрос на поставку</label>
-              </div>
+          <div class="file-edit">
+            <div class="content__file-view">
+              fff
             </div>
+            <form class="content__inputs" @submit.prevent>
+              <label for="">Имя файла</label>
+              <input v-model="title" type="text">
 
-            <label for="">Загрузить новый</label>
-            <input type="file">
-          </form>
+              <label for="">Описание файла</label>
+              <input v-model="description" type="text">
+
+              <label for="">Выбрать стандартность для:</label>
+
+              <div class="document-types">
+                <div class="type">
+                  <input type="radio" id="option1" value="1" v-model="type">
+                  <label for="option1">Акт о приозводстве</label>
+                </div>
+                <div class="type">
+                  <input type="radio" id="option2" value="2" v-model="type">
+                  <label for="option2">Списание на производство</label>
+                </div>
+                <div class="type">
+                  <input type="radio" id="option3" value="3" v-model="type">
+                  <label for="option3">Запрос на поставку</label>
+                </div>
+              </div>
+
+              <label for="">Загрузить новый</label>
+              <input type="file">
+            </form>
+          </div>
           <div class="footer">
             <button class="buttons__btn" @click="updateDocument">Обновить документ</button>
             <button class="buttons__btn" @click="closePopup">Закрыть</button>
@@ -48,6 +50,8 @@
 
 <script>
 import SubmitForm from './SubmitForm.vue'
+import Docxtemplater from 'docxtemplater'
+import JSZipUtils from 'jszip-utils'
 
 export default {
   data () {
@@ -64,6 +68,41 @@ export default {
     currentDocument: Object
   },
   methods: {
+    base64ToArrayBuffer (base64) {
+      const binaryString = window.atob(base64)
+      const len = binaryString.length
+      const bytes = new Uint8Array(len)
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i)
+      }
+      return bytes.buffer
+    },
+
+    // Функция для рендеринга docx документа
+    renderDocxFromBytes (byteData) {
+      return new Promise((resolve, reject) => {
+        const zip = new JSZipUtils()
+        zip.loadAsync(this.base64ToArrayBuffer(byteData))
+          .then(zip => {
+            const doc = new Docxtemplater()
+            doc.loadZip(zip)
+            // Здесь вы можете передать данные для заполнения шаблона, если это необходимо
+            const data = {
+              // Данные для заполнения шаблона
+            }
+            doc.setData(data)
+            try {
+              doc.render()
+              const renderedDoc = doc.getZip().generate({ type: 'blob' })
+              resolve(renderedDoc)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch(error => reject(error))
+      })
+    },
+
     closePopup () {
       this.$emit('close-popup')
     },
@@ -121,9 +160,8 @@ export default {
   flex-direction: column
   align-items: center
   position: absolute
-  max-width: 500px
   min-width: 350px
-  width: 40%
+  width: 80%
   height: fit-content
   background: #fff
   padding: 20px
@@ -139,6 +177,7 @@ export default {
 .content__inputs
   display: flex
   flex-direction: column
+  width: 30%
   gap: 5px
   input[type=text]
     height: 30px
@@ -148,9 +187,18 @@ export default {
     border-radius: 4px
     padding: 0 10px
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+.file-edit
+  display: flex
+  flex-direction: row
+.content__file-view
+  width: 70%
 .document-types
   display: flex
   flex-direction: column
+.type
+  display: flex
+  justify-content: left
+  text-align: left
 .footer
   display: flex
   margin-top: 20px

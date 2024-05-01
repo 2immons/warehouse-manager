@@ -147,6 +147,7 @@ export default {
 <style scoped lang="sass">
 .popup-overlay
   display: flex
+  top: 0
   justify-content: center
   align-items: center
   position: fixed

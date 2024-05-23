@@ -10,6 +10,7 @@ import productionModule from './production'
 import shippingModule from './shipping'
 import writeOffModule from './writeOff'
 import documentModule from './documents'
+import settingsModule from './settings'
 
 export default createStore({
   modules: {
@@ -23,17 +24,10 @@ export default createStore({
     production: productionModule,
     shipping: shippingModule,
     writeOff: writeOffModule,
-    document: documentModule
+    document: documentModule,
+    settings: settingsModule
   },
   state: {
-    organisation: {
-      name: 'ООО "Вектор"',
-      adress: 'Саратов',
-      INN: '2223433322344',
-      OGRN: '2223433322344',
-      CEO: 'Иванов В.П.',
-      isInSetting: false
-    }
   },
   mutations: {
   },

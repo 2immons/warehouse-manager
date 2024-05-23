@@ -2,7 +2,7 @@
   <div class="page">
     <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
     <ProduceForm v-if="isProduceFormVisible" :currentProduct="this.currentProduct" @close-popup="closeProduceForm" @product-creation="fetchProductsFromServer"/>
-    <CreateProductForm v-if="isCreateProductFormVisible" @add-product="fetchProductsFromServer" @close-popup="closeCreateProductForm"/>
+    <CreateProductForm v-if="isCreateFormVisible" @add-product="fetchProductsFromServer" @close-popup="closeCreateProductForm"/>
     <Transition :name="isSideBarAnimate ? 'v' : null">
         <SideBar v-if="isSideBarVisible" @close-sidebar="closeSideBar"/>
     </Transition>
@@ -130,7 +130,7 @@ export default {
       searchDateEnd: '',
       currentProduct: null,
       isProduceFormVisible: false,
-      isCreateProductFormVisible: false,
+      isCreateFormVisible: false,
       isSideBarVisible: false,
       isSubmitFormVisible: false,
       isSideBarAnimate: window.innerWidth < 1780,
@@ -309,8 +309,8 @@ export default {
       this.currentProduct = item
     },
     closeProduceForm: function () { this.isProduceFormVisible = false },
-    openCreateProductForm: function () { this.isCreateProductFormVisible = true },
-    closeCreateProductForm: function () { this.isCreateProductFormVisible = false },
+    openCreateProductForm: function () { this.isCreateFormVisible = true },
+    closeCreateProductForm: function () { this.isCreateFormVisible = false },
     openSubmitForm: function () { this.isSubmitFormVisible = true },
     closeSubmitForm: function () { this.isSubmitFormVisible = false },
     clearInput (item) {

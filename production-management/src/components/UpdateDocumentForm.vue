@@ -8,9 +8,7 @@
         </div>
         <div class="content">
           <div class="file-edit">
-            <div class="content__file-view">
-              fff
-            </div>
+            <iframe :srcdoc="docHTML" frameborder="0"></iframe>
             <form class="content__inputs" @submit.prevent>
               <label for="">Имя файла</label>
               <input v-model="title" type="text">
@@ -22,21 +20,21 @@
 
               <div class="document-types">
                 <div class="type">
-                  <input type="radio" id="option1" value="1" v-model="type">
+                  <input type="radio" id="option1" value="1" v-model="this.type">
                   <label for="option1">Акт о приозводстве</label>
                 </div>
                 <div class="type">
-                  <input type="radio" id="option2" value="2" v-model="type">
+                  <input type="radio" id="option2" value="2" v-model="this.type">
                   <label for="option2">Списание на производство</label>
                 </div>
                 <div class="type">
-                  <input type="radio" id="option3" value="3" v-model="type">
+                  <input type="radio" id="option3" value="3" v-model="this.type">
                   <label for="option3">Запрос на поставку</label>
                 </div>
               </div>
 
               <label for="">Загрузить новый</label>
-              <input type="file">
+              <input type="file" @change="handleFileUpload">
             </form>
           </div>
           <div class="footer">
@@ -50,8 +48,7 @@
 
 <script>
 import SubmitForm from './SubmitForm.vue'
-import Docxtemplater from 'docxtemplater'
-import JSZipUtils from 'jszip-utils'
+import mammoth from 'mammoth'
 
 export default {
   data () {
@@ -61,48 +58,37 @@ export default {
       description: this.currentDocument.description,
       isDefault: this.currentDocument.isDefault,
       file_data: this.currentDocument.file_data,
-      type: this.currentDocument.type
+      type: this.currentDocument.type,
+      docHTML: ''
     }
   },
   props: {
     currentDocument: Object
   },
+  components: { SubmitForm },
+  mounted () {
+    this.createDocUrl()
+  },
   methods: {
-    base64ToArrayBuffer (base64) {
-      const binaryString = window.atob(base64)
-      const len = binaryString.length
-      const bytes = new Uint8Array(len)
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i)
+    createDocUrl () {
+      const bytes = new Uint8Array(this.file_data.data.length)
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = this.file_data.data[i]
       }
-      return bytes.buffer
-    },
 
-    // Функция для рендеринга docx документа
-    renderDocxFromBytes (byteData) {
-      return new Promise((resolve, reject) => {
-        const zip = new JSZipUtils()
-        zip.loadAsync(this.base64ToArrayBuffer(byteData))
-          .then(zip => {
-            const doc = new Docxtemplater()
-            doc.loadZip(zip)
-            // Здесь вы можете передать данные для заполнения шаблона, если это необходимо
-            const data = {
-              // Данные для заполнения шаблона
-            }
-            doc.setData(data)
-            try {
-              doc.render()
-              const renderedDoc = doc.getZip().generate({ type: 'blob' })
-              resolve(renderedDoc)
-            } catch (error) {
-              reject(error)
-            }
-          })
-          .catch(error => reject(error))
-      })
-    },
+      // Конвертируем DOCX в HTML с помощью Mammoth
+      mammoth.convertToHtml({ arrayBuffer: bytes.buffer })
+        .then(result => {
+          const html = result.value // HTML-представление содержимого файла DOCX
+          console.log(html)
 
+          // Устанавливаем HTML-код как srcdoc для iframe
+          this.docHTML = html
+        })
+        .catch(error => {
+          console.error('Error converting DOCX to HTML:', error)
+        })
+    },
     closePopup () {
       this.$emit('close-popup')
     },
@@ -139,8 +125,18 @@ export default {
       console.log('Создание документа отменено')
       this.isSubmitFormVisible = false
     }
-  },
-  components: { SubmitForm }
+    // handleFileUpload (event) {
+    //   const file = event.target.files[0]
+    //   const reader = new FileReader()
+
+    //   reader.onload = (e) => {
+    //     const byteArray = new Uint8Array(reader.result)
+    //     this.file_data = byteArray
+    //   }
+
+    //   reader.readAsArrayBuffer(file)
+    // }
+  }
 }
 </script>
 
@@ -193,6 +189,8 @@ export default {
   flex-direction: row
 .content__file-view
   width: 70%
+  height: 400px
+  border: 1px solid #ccc
 .document-types
   display: flex
   flex-direction: column

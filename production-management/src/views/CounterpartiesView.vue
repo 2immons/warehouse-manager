@@ -2,8 +2,8 @@
   <div class="page">
     <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
     <ProduceForm v-if="isProduceFormVisible" :currentProduct="this.currentProduct" @close-popup="closeProduceForm" @product-creation="fetchCounterpartiesFromServer"/>
-    <CreateCounterpartyForm v-if="isCreateCounterpartyFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeCreateCounterpartyForm"/>
-    <UpdateCounterpartyForm :currentCounterparty="this.currentCounterparty" v-if="isUpdateCounterpartyFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeUpdateCounterpartyForm"/>
+    <CreateCounterpartyForm v-if="isCreateFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeCreateCounterpartyForm"/>
+    <UpdateCounterpartyForm :currentCounterparty="this.currentCounterparty" v-if="isUpdateFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeUpdateCounterpartyForm"/>
     <Transition :name="isSideBarAnimate ? 'v' : null">
         <SideBar v-if="isSideBarVisible" @close-sidebar="closeSideBar"/>
     </Transition>
@@ -123,8 +123,8 @@ export default {
         field: null,
         order: 1
       },
-      isCreateCounterpartyFormVisible: false,
-      isUpdateCounterpartyFormVisible: false,
+      isCreateFormVisible: false,
+      isUpdateFormVisible: false,
       isSearchInputVisible: false,
       isSearchInputDisabled: true,
       showDropDown: false,
@@ -255,13 +255,13 @@ export default {
       this.currentProduct = item
     },
     closeProduceForm: function () { this.isProduceFormVisible = false },
-    openCreateCounterpartyForm: function () { this.isCreateCounterpartyFormVisible = true },
-    closeCreateCounterpartyForm: function () { this.isCreateCounterpartyFormVisible = false },
+    openCreateCounterpartyForm: function () { this.isCreateFormVisible = true },
+    closeCreateCounterpartyForm: function () { this.isCreateFormVisible = false },
     openUpdateCounterpartyForm (item) {
-      this.isUpdateCounterpartyFormVisible = true
+      this.isUpdateFormVisible = true
       this.currentCounterparty = item
     },
-    closeUpdateCounterpartyForm: function () { this.isUpdateCounterpartyFormVisible = false },
+    closeUpdateCounterpartyForm: function () { this.isUpdateFormVisible = false },
     openSubmitForm (item) {
       this.isSubmitFormVisible = true
       this.currentCounterparty = item

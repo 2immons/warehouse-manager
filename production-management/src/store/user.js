@@ -8,6 +8,12 @@ export default {
   mutations: {
     setUsers (state, users) {
       state.users = users
+    },
+    updateUser (state, updatedUser) {
+      const index = state.users.findIndex(user => user.id === updatedUser.id)
+      if (index !== -1) {
+        state.users.splice(index, 1, updatedUser)
+      }
     }
   },
   actions: {
@@ -48,6 +54,15 @@ export default {
         return response
       } catch (error) {
         console.error('Ошибка при регистрации:', error)
+        throw error
+      }
+    },
+    async updateUser ({ commit }, updatedUser) {
+      try {
+        await axios.put('http://localhost:4444/api/update-user', updatedUser, { withCredentials: true })
+        commit('updateUser', updatedUser)
+      } catch (error) {
+        console.error('Ошибка при обновлении пользователя:', error)
         throw error
       }
     }

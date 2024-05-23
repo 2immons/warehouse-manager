@@ -1,20 +1,22 @@
 <template>
   <div class="page">
     <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
-    <ProduceForm v-if="isProduceFormVisible" :currentProduct="this.currentProduct" @close-popup="closeProduceForm" @product-creation="fetchCounterpartiesFromServer"/>
-    <CreateCounterpartyForm v-if="isCreateCounterpartyFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeCreateCounterpartyForm"/>
-    <UpdateCounterpartyForm :currentCounterparty="this.currentCounterparty" v-if="isUpdateCounterpartyFormVisible" @add-counterparty="fetchCounterpartiesFromServer" @close-popup="closeUpdateCounterpartyForm"/>
     <Transition :name="isSideBarAnimate ? 'v' : null">
         <SideBar v-if="isSideBarVisible" @close-sidebar="closeSideBar"/>
     </Transition>
     <div class="container">
       <PageHeader @open-sidebar="openSideBar" @click="handleClickOutside"/>
-      <section class="panel">
-        <DocumentsPanel />
-      </section>
-      <section class="panel">
-        <UsersPanel />
-      </section>
+      <div class="admin-panel-content">
+        <section class="panel">
+          <ConfigurationPanel />
+        </section>
+        <section class="panel">
+          <DocumentsPanel />
+        </section>
+        <section class="panel">
+          <UsersPanel />
+        </section>
+      </div>
       <PageFooter/>
     </div>
   </div>
@@ -26,9 +28,9 @@ import SideBar from '@/components/SideBar.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import DocumentsPanel from '@/components/DocumentsPanel.vue'
 import UsersPanel from '@/components/UsersPanel.vue'
+import ConfigurationPanel from '@/components/ConfigurationPanel.vue'
 import PageFooter from '@/components/PageFooter.vue'
 import SubmitForm from '@/components/SubmitForm.vue'
-import UpdateCounterpartyForm from '@/components/UpdateCounterpartyForm.vue'
 import { mapGetters, mapActions } from 'vuex'
 import '@/styles/buttonsStyles.sass'
 
@@ -36,7 +38,7 @@ export default {
   emits: ['open-sidebar'],
   name: 'productsView',
   components: {
-    SideBar, PageHeader, PageFooter, DocumentsPanel, UsersPanel, SubmitForm, UpdateCounterpartyForm
+    SideBar, PageHeader, PageFooter, DocumentsPanel, UsersPanel, SubmitForm, ConfigurationPanel
   },
   data () {
     return {
@@ -44,8 +46,6 @@ export default {
         field: null,
         order: 1
       },
-      isCreateCounterpartyFormVisible: false,
-      isUpdateCounterpartyFormVisible: false,
       isSearchInputVisible: false,
       isSearchInputDisabled: true,
       showDropDown: false,
@@ -132,13 +132,6 @@ export default {
       this.currentProduct = item
     },
     closeProduceForm: function () { this.isProduceFormVisible = false },
-    openCreateCounterpartyForm: function () { this.isCreateCounterpartyFormVisible = true },
-    closeCreateCounterpartyForm: function () { this.isCreateCounterpartyFormVisible = false },
-    openUpdateCounterpartyForm (item) {
-      this.isUpdateCounterpartyFormVisible = true
-      this.currentCounterparty = item
-    },
-    closeUpdateCounterpartyForm: function () { this.isUpdateCounterpartyFormVisible = false },
     openSubmitForm (item) {
       this.isSubmitFormVisible = true
       this.currentCounterparty = item
@@ -349,4 +342,21 @@ export default {
 .table__header .table-cell-header
     background-color: #f2f2f2
     border: 1px solid black
+.admin-panel-content
+  display: flex
+  flex-direction: column
+  height: 75%
+  overflow: scroll
+.panel
+  align-self: center
+  display: flex
+  align-items: center
+  flex-direction: column
+  width: 80%
+.organisation-info
+  display: flex
+  width: 100%
+.settings
+  display: flex
+  width: 100%
 </style>

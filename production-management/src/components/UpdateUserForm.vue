@@ -3,39 +3,37 @@
       <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
       <div v-if="!isSubmitFormVisible" class="popup" @click.stop>
         <div class="header">
-            <h1 class="header__text">ДОБАВЛЕНИЕ ДОКУМЕНТА</h1>
+            <h1 class="header__text">ОБНОВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ</h1>
             <hr class="div-line">
         </div>
         <div class="content">
-          <form class="content__inputs" @submit.prevent>
-            <label for="">Имя файла</label>
-            <input v-model="title" type="text">
+          <div class="role-edit">
+            <form class="content__inputs" @submit.prevent>
+              <label for="">Имя пользователя:</label>
+              <input v-model="this.username" type="text">
 
-            <label for="">Описание файла</label>
-            <input v-model="description" type="text">
+              <label for="">Имя, фамилия, отчество:</label>
+              <input v-model="this.name" type="text">
 
-            <label for="">Выбрать стандартность для:</label>
+              <label for="">Электронная почта</label>
+              <input v-model="this.email" type="text">
 
-            <div class="document-types">
-              <div class="type">
-                <input type="radio" id="option1" value="1" v-model="type">
-                <label for="option1">Акт о приозводстве</label>
+              <label for="">Выбрать роль:</label>
+
+              <div class="user-roles">
+                <div class="role">
+                  <input type="radio" id="option1" value="1" v-model="this.role">
+                  <label for="option1">Администратор</label>
+                </div>
+                <div class="role">
+                  <input type="radio" id="option2" value="2" v-model="this.role">
+                  <label for="option2">Отдел производства</label>
+                </div>
               </div>
-              <div class="type">
-                <input type="radio" id="option2" value="2" v-model="type">
-                <label for="option2">Списание на производство</label>
-              </div>
-              <div class="type">
-                <input type="radio" id="option3" value="3" v-model="type">
-                <label for="option3">Запрос на поставку</label>
-              </div>
-            </div>
-
-            <label for="">Загрузить</label>
-            <input type="file" @change="handleFileUpload">
-          </form>
+            </form>
+          </div>
           <div class="footer">
-            <button class="buttons__btn" @click="createDocument">Добавить документ</button>
+            <button class="buttons__btn" @click="updateUser">Обновить пользователя</button>
             <button class="buttons__btn" @click="closePopup">Закрыть</button>
           </div>
         </div>
@@ -50,38 +48,43 @@ export default {
   data () {
     return {
       isSubmitFormVisible: false,
-      title: '',
-      description: '',
-      file_data: '',
-      isDefault: '',
-      type: ''
+      username: this.currentUser.username,
+      name: this.currentUser.name,
+      email: this.currentUser.email,
+      role: this.currentUser.role
     }
+  },
+  props: {
+    currentUser: Object
   },
   methods: {
     closePopup () {
       this.$emit('close-popup')
     },
-    createDocument () {
+    updateUser () {
       this.isSubmitFormVisible = true
     },
     async confirmActions () {
       try {
-        await this.$store.dispatch('createDocument', {
-          title: this.title,
-          description: this.description,
-          file_data: this.file_data
+        await this.$store.dispatch('updateUser', {
+          id: this.currentUser.id,
+          username: this.currentUser.username,
+          name: this.name,
+          email: this.email,
+          role: this.role,
+          is_deleted: this.currentUser.is_deleted
         })
 
         const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
 
         await this.$store.dispatch('createLog', {
           user_id: Number(sessionStorage.getItem('userId')),
-          operation: 'добавлен шаблон документа: ' + this.title,
+          operation: 'обновлен пользователь: ' + this.title,
           date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
         })
 
         this.isSubmitFormVisible = false
-        this.$emit('create-document')
+        this.$emit('update-user')
         this.closePopup()
       } catch (error) {
         console.error('Ошибка при создании документа:', error)
@@ -90,17 +93,6 @@ export default {
     denyActions () {
       console.log('Создание документа отменено')
       this.isSubmitFormVisible = false
-    },
-    handleFileUpload (event) {
-      const file = event.target.files[0]
-      const reader = new FileReader()
-
-      reader.onload = (e) => {
-        const byteArray = new Uint8Array(reader.result)
-        this.file_data = byteArray
-      }
-
-      reader.readAsArrayBuffer(file)
     }
   },
   components: { SubmitForm }
@@ -125,7 +117,7 @@ export default {
   align-items: center
   position: absolute
   min-width: 350px
-  width: 40%
+  width: fit-content
   height: fit-content
   background: #fff
   padding: 20px
@@ -141,6 +133,7 @@ export default {
 .content__inputs
   display: flex
   flex-direction: column
+  width: 100%
   gap: 5px
   input[type=text]
     height: 30px
@@ -150,10 +143,14 @@ export default {
     border-radius: 4px
     padding: 0 10px
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-.document-types
+.role-edit
+  display: flex
+  flex-direction: row
+  width: 100%
+.user-roles
   display: flex
   flex-direction: column
-.type
+.role
   display: flex
   justify-content: left
   text-align: left

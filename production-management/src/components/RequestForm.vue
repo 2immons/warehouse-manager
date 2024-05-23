@@ -8,46 +8,15 @@
           <div class="content">
             <div class="intro-info">
               <div class="input-line">
-                <label for="">Поле</label>
-                <input class="input-short" v-model="this.UPD_SF_Number" type="text">
-                <label for="">от</label>
+                <label for="">Дата</label>
                 <input type="date" v-model="this.UPD_SF_date" required>
-              </div>
-              <div class="input-wrapper">
-                <label for="">Поле</label>
-                <input class="input-short" v-model="this.status" type="text">
-              </div>
-              <div class="input-line">
-                <div class="input-wrapper">
-                  <label for="">Поле</label>
+                <label for="">Контактное лицо (имя, отчество)</label>
                   <input v-model="this.supplierName" type="text">
-                </div>
-                <div class="input-wrapper">
-                  <label for="">Поле</label>
-                  <input v-model="this.supplierAdress" type="text">
-                </div>
               </div>
               <div class="input-line">
                 <div class="input-wrapper">
-                  <label for="">Поле</label>
-                  <input v-model="this.supplierINN" type="text">
-                </div>
-                <div class="input-wrapper">
-                  <label for="">Поле</label>
-                  <input v-model="this.supplierKPP" type="text">
-                </div>
-              </div>
-              <div class="input-line">
-                <div class="input-wrapper">
-                  <label for="">Поле</label>
-                  <input class="input-short" v-model="this.client" type="text">
-                </div>
-                <div class="input-wrapper">
-                  <label for="">Дата</label>
+                  <label for="">Предоставить до:</label>
                   <input class="input-short" v-model="this.date" type="date" required>
-                </div>
-                <div class="input-wrapper">
-                  <input type="file" @change="handleFileUpload" />
                 </div>
               </div>
             </div>

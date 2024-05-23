@@ -51,18 +51,6 @@
           <div class="error-message" v-if="v$.registrationFormData.email.required.$invalid">* Обязательное поле</div>
           <div class="error-message" v-if="v$.registrationFormData.email.email.$invalid">* Неверный формат почты</div>
 
-          <label>Роль:</label>
-          <label><input type="radio" required value="1" v-model="registrationFormData.role">Администратор</label>
-          <label><input type="radio" required value="2" v-model="registrationFormData.role">Отдел производства</label>
-          <div class="error-message" v-if="v$.registrationFormData.role.required.$invalid">* Выберите роль</div>
-
-          <div v-if="organisation.isSetting" class="role-input-wrapper">
-              <label>Сотрудник</label>
-              <input type="radio" name="contact"/>
-              <label>Администратор</label>
-              <input type="radio" name="contact"/>
-          </div>
-
           <button class="form-button" type="submit">Зарегистрироваться</button>
           <div class="invalid-credentinals-error" v-if="isRegistrationFailed">Такой пользователь уже существует!</div>
           <button @click="formToggle" class="form-toggle-button" type="submit">Есть аккаунт? Войти</button>
@@ -93,8 +81,7 @@ export default {
         registerPassword: '',
         registerPasswordRepeat: '',
         name: '',
-        email: '',
-        role: ''
+        email: ''
       }
     }
   },
@@ -114,8 +101,7 @@ export default {
         registerPassword: { required, minLength: minLength(8), sameAs: sameAs(this.registrationFormData.registerPasswordRepeat) },
         registerPasswordRepeat: { required, sameAs: sameAs(this.registrationFormData.registerPassword) },
         name: { required, minLength: minLength(3) },
-        email: { required, email },
-        role: { required }
+        email: { required, email }
       }
     }
   },
@@ -162,8 +148,7 @@ export default {
           username: this.registrationFormData.registerUsername,
           name: this.registrationFormData.name,
           email: this.registrationFormData.email,
-          password: this.registrationFormData.registerPassword,
-          role: this.registrationFormData.role
+          password: this.registrationFormData.registerPassword
         })
 
         if (!response.data.success) {

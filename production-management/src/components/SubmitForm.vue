@@ -44,6 +44,8 @@ export default {
   height: 100%
   background: rgba(0, 0, 0, 0.7)
   z-index: 2
+  left: 0
+  top: 0
 
 .popup
   z-index: 7

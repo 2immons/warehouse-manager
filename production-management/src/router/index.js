@@ -48,11 +48,19 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const token = await Cookies.get('token')
   const tokenExpiration = await Cookies.get('token_expiration')
+  const userId = Number(sessionStorage.getItem('role'))
+  const isAdmin = userId === 1
 
   if (to.path !== '/home') {
     if (token && tokenExpiration && new Date(tokenExpiration) > new Date()) {
       if (to.path === '/') {
         next('/details')
+      } else if (to.path === '/admin') {
+        if (isAdmin) {
+          next()
+        } else {
+          next('/details')
+        }
       } else {
         next()
       }

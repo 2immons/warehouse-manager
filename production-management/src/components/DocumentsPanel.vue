@@ -1,6 +1,6 @@
 <template>
-    <CreateDocumentForm v-if="isCreateDocumentFormVisible" @create-document="fetchDocumentsFromServer" @close-popup="closeCreateDocumentForm"/>
-    <UpdateDocumentForm :currentDocument="this.currentDocument" v-if="isUpdateDocumentFormVisible" @update-document="fetchDocumentsFromServer" @close-popup="closeUpdateDocumentForm"/>
+    <CreateDocumentForm v-if="isCreateFormVisible" @create-document="fetchDocumentsFromServer" @close-popup="closeCreateDocumentForm"/>
+    <UpdateDocumentForm :currentDocument="this.currentDocument" v-if="isUpdateFormVisible" @update-document="fetchDocumentsFromServer" @close-popup="closeUpdateDocumentForm"/>
     <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
     <div class="section-header">
       <h2 class="section-header__text">ДОКУМЕНТЫ</h2>
@@ -44,8 +44,8 @@ export default {
 
   data () {
     return {
-      isCreateDocumentFormVisible: false,
-      isUpdateDocumentFormVisible: false,
+      isCreateFormVisible: false,
+      isUpdateFormVisible: false,
       isPopupVisible: false,
       isSubmitFormVisible: false,
       filteredItems: [],
@@ -79,6 +79,14 @@ export default {
     async confirmActions () {
       try {
         await this.$store.dispatch('deleteDocument', this.currentDocument.id)
+
+        const currentDateTime = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Samara' })
+
+        await this.$store.dispatch('createLog', {
+          user_id: Number(sessionStorage.getItem('userId')),
+          operation: 'удален шаблон документа: ' + this.title,
+          date: currentDateTime.toString().slice(0, 19).replace('T', ' ')
+        })
       } catch (error) {
         console.error('Ошибка удалении документа:', error)
       }
@@ -89,13 +97,13 @@ export default {
       console.log('Не подтверждено готовность')
       this.isSubmitFormVisible = false
     },
-    closeCreateDocumentForm: function () { this.isCreateDocumentFormVisible = false },
-    openCreateDocumentForm: function () { this.isCreateDocumentFormVisible = true },
+    closeCreateDocumentForm: function () { this.isCreateFormVisible = false },
+    openCreateDocumentForm: function () { this.isCreateFormVisible = true },
 
-    closeUpdateDocumentForm: function () { this.isUpdateDocumentFormVisible = false },
+    closeUpdateDocumentForm: function () { this.isUpdateFormVisible = false },
     openUpdateDocumentForm (item) {
       this.currentDocument = item
-      this.isUpdateDocumentFormVisible = true
+      this.isUpdateFormVisible = true
     }
   }
 }
@@ -116,12 +124,13 @@ export default {
 .documents-list
   display: flex
   flex-direction: column
-  width: 80%
+  width: 100%
 .documents-list--header
   margin-bottom: 10px
   font-weight: 700
 .document-wrapper
   display: grid
+  align-items: center
   width: 100%
   grid-template-columns: 20% 65% 15%
   grid-template-rows: 1fr

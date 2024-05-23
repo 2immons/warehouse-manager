@@ -26,10 +26,10 @@
                 <router-link class="router-link" to="/logs">История изменений</router-link>
             </div>
             <hr class="div-line">
-            <div :class="{ 'nav-item': true, 'active': $route.path === '/admin' }">
+            <div :class="{ 'nav-item': true, 'active': $route.path === '/admin' }" v-if="this.isAdmin">
                 <router-link class="router-link" to="/admin">Администрирование</router-link>
             </div>
-            <hr class="div-line">
+            <hr class="div-line" v-if="this.isAdmin">
         </nav>
         <div class="time-section">
             <p>Текущее время (GTM +4):</p>
@@ -55,6 +55,8 @@ export default {
   data () {
     return {
       username: '',
+      userId: '',
+      isAdmin: '',
       isSidebarButtonVisible: false,
       currentTime: this.getCurrentTime()
     }
@@ -66,6 +68,8 @@ export default {
   },
   mounted () {
     this.username = sessionStorage.getItem('username')
+    this.userId = Number(sessionStorage.getItem('role'))
+    this.isAdmin = this.userId === 1
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
   },

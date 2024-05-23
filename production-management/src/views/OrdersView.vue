@@ -2,8 +2,8 @@
     <div class="page">
         <SubmitForm v-if="isSubmitFormVisible" @confirm="confirmActions" @deny="denyActions"/>
         <ShippingForm :currentOrder="this.currentOrder" v-if="isShippingFormVisible" @close-popup="closeShippingForm" @order-shipped="fetchOrdersFromServer"/>
-        <UpdateOrderForm :currentOrder="this.currentOrder" v-if="isUpdateOrderFormVisible" @close-popup="closeUpdateOrderForm" @order-shipped="fetchOrdersFromServer"/>
-        <CreateOrderForm v-if="isCreateOrderFormVisible" @close-popup="closeCreateOrderForm" @order-creation="fetchOrdersFromServer"/>
+        <UpdateOrderForm :currentOrder="this.currentOrder" v-if="isUpdateFormVisible" @close-popup="closeUpdateOrderForm" @order-shipped="fetchOrdersFromServer"/>
+        <CreateOrderForm v-if="isCreateFormVisible" @close-popup="closeCreateOrderForm" @order-creation="fetchOrdersFromServer"/>
         <RequirementsForm :currentOrder="this.currentOrder" v-if="isRequirementFormVisible" @close-popup="closeRequirementForm" @requirements-creation="fetchOrdersFromServer"/>
         <Transition :name="isSideBarAnimate ? 'v' : null">
             <SideBar v-if="isSideBarVisible" @close-sidebar="closeSideBar" msg="Welcome to Your Vue.js App"/>
@@ -193,10 +193,10 @@ export default {
       currentOrder: null,
       isSubmitFormVisible: false,
       isShippingFormVisible: false,
-      isCreateOrderFormVisible: false,
+      isCreateFormVisible: false,
       isSideBarVisible: false,
       isRequirementFormVisible: false,
-      isUpdateOrderFormVisible: false,
+      isUpdateFormVisible: false,
       isSideBarAnimate: window.innerWidth < 1780,
       userRole: 0,
       notShippedVisible: true,
@@ -413,14 +413,14 @@ export default {
     },
     closeShippingForm: function () { this.isShippingFormVisible = false },
     openUpdateOrderForm (item) {
-      this.isUpdateOrderFormVisible = true
+      this.isUpdateFormVisible = true
       this.currentOrder = item
     },
-    closeUpdateOrderForm: function () { this.isUpdateOrderFormVisible = false },
+    closeUpdateOrderForm: function () { this.isUpdateFormVisible = false },
     openSubmitForm: function () { this.isSubmitFormVisible = true },
     closeSubmitForm: function () { this.isSubmitFormVisible = false },
-    openCreateOrderForm: function () { this.isCreateOrderFormVisible = true },
-    closeCreateOrderForm: function () { this.isCreateOrderFormVisible = false },
+    openCreateOrderForm: function () { this.isCreateFormVisible = true },
+    closeCreateOrderForm: function () { this.isCreateFormVisible = false },
     openRequirementForm (item) {
       this.isRequirementFormVisible = true
       this.currentOrder = item

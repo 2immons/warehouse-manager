@@ -125,17 +125,6 @@ export default {
       console.log('Создание документа отменено')
       this.isSubmitFormVisible = false
     }
-    // handleFileUpload (event) {
-    //   const file = event.target.files[0]
-    //   const reader = new FileReader()
-
-    //   reader.onload = (e) => {
-    //     const byteArray = new Uint8Array(reader.result)
-    //     this.file_data = byteArray
-    //   }
-
-    //   reader.readAsArrayBuffer(file)
-    // }
   }
 }
 </script>
